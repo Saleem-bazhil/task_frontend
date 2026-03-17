@@ -17,13 +17,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   // Define the menu items based on your requirements
   const menuItems = [
-    { name: 'Dashboard', path: '/', icon: LayoutDashboard },
-    { name: 'My Tasks', path: '/my-tasks', icon: ListTodo },
-    { name: 'Accepted Tasks', path: '/accepted-tasks', icon: CheckSquare },
-    { name: 'Completed Tasks', path: '/completed-tasks', icon: CheckCircle },
-    { name: 'Messages / Chat', path: '/messages', icon: MessageSquare },
-    { name: 'Notifications', path: '/notifications', icon: Bell },
-    { name: 'Profile', path: '/profile', icon: User },
+    { name: 'Dashboard', path: '/app', icon: LayoutDashboard },
+    { name: 'My Tasks', path: '/app/my-tasks', icon: ListTodo },
+    { name: 'Accepted Tasks', path: '/app/accepted-tasks', icon: CheckSquare },
+    { name: 'Completed Tasks', path: '/app/completed-tasks', icon: CheckCircle },
+    { name: 'Messages / Chat', path: '/app/messages', icon: MessageSquare },
+    { name: 'Notifications', path: '/app/notifications', icon: Bell },
+    { name: 'Profile', path: '/app/profile', icon: User },
   ];
 
   return (
@@ -43,7 +43,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       >
         {/* Logo / Brand Area */}
         <div className="flex h-16 items-center justify-between px-6 border-b border-gray-200 dark:border-slate-800">
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400">
+          <Link to="/app" className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400">
             <CheckSquare className="h-6 w-6" />
             <span>TaskFlow</span>
           </Link>
