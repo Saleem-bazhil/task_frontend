@@ -1,177 +1,115 @@
-import React, { useEffect, useRef, useState } from 'react';
-import API from '../../api/Api';
+import React, { useState, useEffect, useRef } from "react";
 
-const ChatWindow = ({ chat }) => {
-
+const ChatWindow = ({ room, currentUser }) => {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const socketRef = useRef(null);
+  const [message, setMessage] = useState("");
+  const ws = useRef(null);
+  const bottomRef = useRef(null);
 
-  const user = "saleem";
+  const BASE = "http://127.0.0.1:8000";
 
-  // 🔌 WebSocket (FIXED VERSION)
-  const [socketState, setSocketState] = useState('disconnected');
-
+  // 📥 Fetch history
   useEffect(() => {
-    if (!chat?.id) return;
+    if (!room) return;
 
-    if (socketRef.current) {
-      socketRef.current.close();
-      socketRef.current = null;
-    }
-
-    if (!('WebSocket' in window)) {
-      console.warn('WebSocket not supported in this browser.');
-      setSocketState('unsupported');
-      return;
-    }
-
-    let shouldReconnect = true;
-    let reconnectTimer = null;
-
-    const connect = () => {
-      setSocketState('connecting');
-      const wsUrl = `ws://${window.location.hostname}:8000/ws/chat/${chat.id}/`;
-      let socket;
-
-      try {
-        socket = new WebSocket(wsUrl);
-      } catch (err) {
-        console.error('WebSocket constructor failed', err);
-        setSocketState('failed');
-        return;
-      }
-
-      socketRef.current = socket;
-
-      socket.onopen = () => {
-        console.log('WebSocket connected ✅');
-        setSocketState('connected');
-      };
-
-      socket.onmessage = (e) => {
-        try {
-          const data = JSON.parse(e.data);
-          if (!data.message) return;
-
-          setMessages((prev) => [
-            ...prev,
-            { text: data.message, sender: data.sender, isMe: data.sender === user },
-          ]);
-        } catch (err) {
-          console.error('Failed to parse WebSocket message', err);
-        }
-      };
-
-      socket.onerror = (err) => {
-        console.error('WebSocket error ❌', err);
-        setSocketState('error');
-      };
-
-      socket.onclose = (event) => {
-        console.log('WebSocket closed', event.code, event.reason);
-        if (shouldReconnect) {
-          setSocketState('reconnecting');
-          reconnectTimer = setTimeout(connect, 2000);
-        }
-      };
-    };
-
-    connect();
-
-    return () => {
-      shouldReconnect = false;
-      if (reconnectTimer) clearTimeout(reconnectTimer);
-      socketRef.current?.close();
-      socketRef.current = null;
-    };
-  }, [chat?.id, user]);
-
-  // 📥 Fetch messages (FIXED)
-  useEffect(() => {
-    if (!chat?.id) return;
-
-    const fetchMessages = async () => {
-      try {
-        const res = await API.get(`/api/messages/${chat.id}/`);
-
-        const formatted = res.data.map(msg => ({
-          text: msg.content,
-          sender: msg.sender,
-          isMe: msg.sender === user
+    fetch(`${BASE}/api/messages/${room}/`)
+      .then(res => res.json())
+      .then(data => {
+        const formatted = data.map(m => ({
+          id: m.id,
+          text: m.content,
+          sender: m.sender,
+          isMe: m.sender === currentUser
         }));
-
         setMessages(formatted);
+      });
+  }, [room, currentUser]);
 
-      } catch (err) {
-        console.error("API error ❌", err);
-      }
+  // 🔌 WebSocket
+  useEffect(() => {
+    if (!room) return;
+
+    const socket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${room}/`);
+    ws.current = socket;
+
+    socket.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now(),
+          text: data.message,
+          sender: data.sender,
+          isMe: data.sender === currentUser
+        }
+      ]);
     };
 
-    fetchMessages();
+    return () => socket.close();
+  }, [room, currentUser]);
 
-  }, [chat?.id]); // 🔥 FIXED dependency
+  // 🔽 scroll
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-  // 📤 Send message (SAFE VERSION)
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  // 📤 send
+  const sendMessage = () => {
+    if (!message.trim()) return;
 
-    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      socketRef.current.send(JSON.stringify({ message: input, sender: user }));
-      setInput('');
-      return;
+    if (ws.current?.readyState === WebSocket.OPEN) {
+      ws.current.send(JSON.stringify({
+        message,
+        sender: currentUser
+      }));
     }
 
-    // Fallback to REST send endpoint if socket is unavailable
-    try {
-      await API.post(`/api/chat/${chat.id}/send/`, { message: input, sender: user });
-      setMessages((prev) => [...prev, { text: input, sender: user, isMe: true }]);
-      setInput('');
-    } catch (err) {
-      console.error('Message send failed', err);
-      alert('Unable to send message right now. Try again.');
-    }
+    setMessage("");
   };
 
+  if (!room) {
+    return (
+      <div className="flex items-center justify-center h-full text-gray-400">
+        Select a chat to start messaging
+      </div>
+    );
+  }
+
   return (
-    <div className="flex-1 flex flex-col bg-white p-4">
+    <div className="flex flex-col h-full bg-white rounded-2xl border">
+
+      {/* HEADER */}
+      <div className="p-4 border-b font-bold">
+        {room}
+      </div>
 
       {/* MESSAGES */}
-      <div className="mb-3 text-xs text-gray-500">
-        WebSocket status: <strong>{socketState}</strong>. {socketState !== 'connected' && 'Using fallback mode.'}
-      </div>
-      <div className="flex-1 overflow-y-auto space-y-2">
-
-        {messages.map((m, i) => (
-          <div key={i} className={m.isMe ? "text-right" : "text-left"}>
-            <span className={`px-3 py-1 rounded inline-block
-              ${m.isMe ? "bg-indigo-600 text-white" : "bg-gray-200"}`}>
-              
-              <b>{m.sender}:</b> {m.text}
-            </span>
+      <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+        {messages.map(m => (
+          <div key={m.id} className={m.isMe ? "text-right" : "text-left"}>
+            <div className={`inline-block px-3 py-2 rounded m-1
+              ${m.isMe ? "bg-blue-500 text-white" : "bg-white border"}`}>
+              <b>{m.sender}</b><br/>
+              {m.text}
+            </div>
           </div>
         ))}
-
+        <div ref={bottomRef} />
       </div>
 
       {/* INPUT */}
-      <div className="flex gap-2 mt-2">
-
+      <div className="p-3 flex gap-2 border-t">
         <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="flex-1 border px-2 py-1 rounded"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="flex-1 border p-2 rounded"
           placeholder="Type message..."
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-
-        <button 
-          onClick={sendMessage} 
-          className="bg-blue-500 text-white px-3 rounded"
-        >
+        <button onClick={sendMessage} className="bg-blue-500 text-white px-4 rounded">
           Send
         </button>
-
       </div>
 
     </div>

@@ -33,7 +33,7 @@ const TaskActivity = () => {
       
       <div className="p-6">
         <div className="relative border-l-2 border-gray-100 ml-3 space-y-8">
-          {activities.map((activity, index) => (
+          {activities.map((activity) => (
             <div key={activity.id} className="relative pl-8">
               {/* Timeline marker */}
               <span className={`absolute -left-[17px] top-1 flex items-center justify-center w-8 h-8 rounded-full ring-4 ${activity.iconClass}`}>
