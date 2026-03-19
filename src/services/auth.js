@@ -21,6 +21,12 @@ export async function fetchCurrentUser() {
   return response.data;
 }
 
+export async function updateProfile(payload) {
+  const response = await api.patch("/api/auth/me/", payload);
+  setStoredUser(response.data);
+  return response.data;
+}
+
 export function logout() {
   clearAuthStorage();
 }

@@ -9,7 +9,6 @@ const TITLES = {
   "/app/accepted-tasks": "Accepted Tasks",
   "/app/completed-tasks": "Completed Tasks",
   "/app/messages": "Messages",
-  "/app/notifications": "Notifications",
   "/app/profile": "Profile",
 };
 

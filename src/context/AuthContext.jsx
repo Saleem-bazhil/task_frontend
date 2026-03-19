@@ -5,6 +5,7 @@ import {
   login as loginRequest,
   logout as logoutRequest,
   register as registerRequest,
+  updateProfile as updateProfileRequest,
 } from "../services/auth";
 import { getAccessToken, getStoredUser } from "../services/storage";
 
@@ -54,6 +55,11 @@ export function AuthProvider({ children }) {
       logout() {
         logoutRequest();
         setUser(null);
+      },
+      async updateProfile(payload) {
+        const updatedUser = await updateProfileRequest(payload);
+        setUser(updatedUser);
+        return updatedUser;
       },
     }),
     [isBootstrapping, user]

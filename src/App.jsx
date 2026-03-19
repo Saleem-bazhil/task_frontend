@@ -9,7 +9,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Messages from "./pages/Messages";
 import MyTasks from "./pages/MyTasks";
-import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 
 function App() {
@@ -25,7 +24,6 @@ function App() {
             <Route path="accepted-tasks" element={<AcceptedTasks />} />
             <Route path="completed-tasks" element={<CompletedTasks />} />
             <Route path="messages" element={<Messages />} />
-            <Route path="notifications" element={<Notifications />} />
             <Route path="profile" element={<Profile />} />
           </Route>
         </Route>
