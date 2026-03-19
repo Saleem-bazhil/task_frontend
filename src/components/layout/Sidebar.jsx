@@ -1,4 +1,4 @@
-import { Bell, CheckCircle, CheckSquare, LayoutDashboard, ListTodo, LogOut, MessageSquare, User, X } from "lucide-react";
+import { CheckCircle, CheckSquare, LayoutDashboard, ListTodo, LogOut, MessageSquare, User, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/useAuth";
@@ -14,7 +14,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     { name: "Accepted Tasks", path: "/app/accepted-tasks", icon: CheckSquare },
     { name: "Completed Tasks", path: "/app/completed-tasks", icon: CheckCircle },
     { name: "Messages / Chat", path: "/app/messages", icon: MessageSquare },
-    { name: "Notifications", path: "/app/notifications", icon: Bell },
     { name: "Profile", path: "/app/profile", icon: User },
   ];
 
