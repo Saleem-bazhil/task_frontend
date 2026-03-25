@@ -1,4 +1,4 @@
-﻿import { useDeferredValue, useMemo } from "react";
+import { useDeferredValue, useMemo } from "react";
 import { MessageSquarePlus, Search } from "lucide-react";
 
 export default function ConversationSidebar({
@@ -37,11 +37,11 @@ export default function ConversationSidebar({
   const items = mode === "new" ? filteredUsers : filteredConversations;
 
   return (
-    <aside className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.45)] backdrop-blur">
-      <div className="border-b border-slate-200 bg-[radial-gradient(circle_at_top_left,_rgba(228,31,106,0.15),_transparent_45%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-5">
+    <aside className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="border-b border-slate-200 bg-slate-50/50 p-5">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-pink-700">Live Chat</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Live Chat</p>
             <h2 className="mt-2 text-xl font-semibold text-slate-900">{currentUser.username}</h2>
             <p className="text-sm text-slate-500">{currentUser.role === "admin" ? "Administrator" : "Employee"}</p>
           </div>
@@ -49,14 +49,14 @@ export default function ConversationSidebar({
           <button
             type="button"
             onClick={() => onModeChange(mode === "new" ? "inbox" : "new")}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:border-pink-200 hover:text-pink-600"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
             title={mode === "new" ? "Back to inbox" : "Start a new chat"}
           >
             <MessageSquarePlus className="h-5 w-5" />
           </button>
         </div>
 
-        <label className="mt-5 flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <label className="mt-5 flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm transition-colors focus-within:border-pink-500 focus-within:ring-1 focus-within:ring-pink-500">
           <Search className="h-4 w-4 text-slate-400" />
           <input
             value={search}
@@ -74,7 +74,7 @@ export default function ConversationSidebar({
           </div>
         ) : null}
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           {mode === "new"
             ? items.map((user) => (
                 <button
@@ -82,7 +82,7 @@ export default function ConversationSidebar({
                   type="button"
                   onClick={() => onCreateConversation(user)}
                   disabled={isCreatingRoom}
-                  className="flex w-full items-center justify-between rounded-3xl border border-transparent bg-slate-50 px-4 py-4 text-left transition hover:border-pink-100 hover:bg-pink-50"
+                  className="flex w-full items-center justify-between rounded-xl border border-transparent px-4 py-3 text-left transition-colors hover:bg-slate-50"
                 >
                   <div>
                     <p className="font-medium text-slate-900">{user.username}</p>
@@ -100,21 +100,20 @@ export default function ConversationSidebar({
                     key={conversation.room_id}
                     type="button"
                     onClick={() => onOpenConversation(conversation)}
-                    className={`w-full rounded-3xl px-4 py-4 text-left transition ${
+                  className={`w-full rounded-xl px-4 py-3 text-left transition-colors ${
                       isActive
-                        ? "border border-pink-200 bg-pink-50 shadow-[0_18px_30px_-28px_rgba(228,31,106,0.9)]"
-                        : "border border-transparent bg-slate-50 hover:border-slate-200 hover:bg-white"
+                        ? "bg-pink-50/50"
+                        : "bg-white hover:bg-slate-50"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="truncate font-medium text-slate-900">{conversation.other_user.username}</p>
+                        <p className="truncate font-semibold text-slate-900">{conversation.other_user.username}</p>
                         <p className="mt-1 truncate text-sm text-slate-500">
                           {conversation.last_message?.content || "No messages yet"}
                         </p>
                       </div>
-                      <span className="shrink-0 text-xs text-slate-400">
-                        {conversation.last_message
+                      <span className="shrink-0 text-xs text-slate-500 font-semibold">                        {conversation.last_message
                           ? new Date(conversation.last_message.timestamp).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
