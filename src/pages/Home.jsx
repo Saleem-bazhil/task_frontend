@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import { motion, AnimatePresence } from "framer-motion";
-
-=======
->>>>>>> 180f6072a85de1789230b2e4ecd02c0f35f5f506
+import { Sparkles } from "lucide-react";
 import ActivityTimeline from "../components/HomeComponents/ActivityTimeline";
 import DashboardCards from "../components/HomeComponents/DashboardCards";
 import RecentTasks from "../components/HomeComponents/RecentTasks";
@@ -48,37 +45,60 @@ export default function Home() {
   const isAdmin = dashboard?.viewer_role === "admin";
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] selection:bg-pink-100 selection:text-pink-900">
+    <div className="min-h-screen bg-[#F8F9FA] selection:bg-pink-200 selection:text-pink-900">
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto max-w-[1600px] space-y-10 p-6 md:p-10 lg:p-12"
+        /* RESPONSIVE: Tightened spacing on mobile, standard on desktop */
+        className="mx-auto max-w-7xl space-y-5 p-4 sm:space-y-6 sm:p-6 lg:p-8"
       >
-        {/* Header Section - Modern Glassmorphic Design */}
-        <section className="group relative overflow-hidden rounded-[2.5rem] border border-white bg-white/60 p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] backdrop-blur-xl transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.06)]">
-          {/* Animated Background Accents */}
-          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-pink-500/10 blur-[80px] transition-all duration-700 group-hover:bg-pink-500/15" />
-          <div className="absolute -bottom-24 -left-16 h-80 w-80 rounded-full bg-blue-500/5 blur-[100px]" />
+        {/* MATCHING MOBILE: The "Personal Hub" Pink Banner */}
+        {/* RESPONSIVE: Reduced massive desktop padding, scaled border radius for mobile */}
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-pink-500 to-pink-600 p-6 sm:rounded-[2rem] sm:p-8 lg:p-10 shadow-md shadow-pink-600/10">
+          {/* Background decorations */}
+          <div className="absolute -right-10 -top-10 h-64 w-64 rounded-full bg-white/10 blur-[40px] pointer-events-none" />
+          <div className="absolute -bottom-10 right-0 opacity-10 pointer-events-none">
+            <Sparkles className="h-40 w-40 text-white sm:h-48 sm:w-48" />
+          </div>
           
-          <div className="relative z-10">
-            <div className="flex items-center gap-3">
-              <span className="h-[2px] w-6 bg-pink-600/40 rounded-full" />
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-pink-600/80">Overview</p>
+          <div className="relative z-10 flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div className="text-white flex-1">
+              {/* Badge */}
+              <div className="mb-3 sm:mb-4 inline-flex items-center rounded-full bg-white/20 px-3 py-1 sm:px-4 sm:py-1.5 backdrop-blur-md">
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-white">Personal Hub</span>
+              </div>
+              
+              {/* RESPONSIVE: Scaled down text so it isn't so huge on desktop */}
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+                Welcome back, {user?.username || "Guest"}
+              </h2>
+              
+              <p className="mt-2 sm:mt-3 max-w-xl text-sm sm:text-base text-pink-50/90">
+                Stay on top of your work, deadlines, and recent updates without leaving the dashboard.
+              </p>
+
+              {/* Stats - RESPONSIVE: Flex wrap prevents breaking on tiny phone screens */}
+              <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-6 sm:gap-10">
+                <div>
+                  <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-pink-200">Total Tasks</p>
+                  <p className="mt-0.5 sm:mt-1 text-2xl sm:text-3xl font-bold">{dashboard?.stats?.total || 0}</p>
+                </div>
+                <div className="h-8 sm:h-10 w-px bg-pink-400/50" />
+                <div>
+                  <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-pink-200">Due Soon</p>
+                  <p className="mt-0.5 sm:mt-1 text-2xl sm:text-3xl font-bold">{dashboard?.stats?.due_soon || 0}</p>
+                </div>
+              </div>
             </div>
-            
-            <h2 className="mt-4 text-4xl font-black tracking-tight text-slate-900 md:text-5xl lg:text-6xl">
-              Welcome back, <span className="bg-gradient-to-r from-slate-900 via-slate-800 to-pink-600 bg-clip-text text-transparent">{user?.username}</span>
-            </h2>
-            
-            <p className="mt-6 max-w-2xl text-[16px] font-medium leading-relaxed text-slate-500/90 md:text-lg">
-              {isAdmin
-                ? "Track team delivery, review assignment load, and spot overdue work before it slips."
-                : "Review your current workload, recent changes, and upcoming deadlines from one place."}
-            </p>
+
+            {/* Top right icon */}
+            <div className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md md:flex lg:h-16 lg:w-16">
+              <Sparkles className="h-6 w-6 lg:h-8 lg:w-8" />
+            </div>
           </div>
         </section>
 
-        {/* Error Alert - Clean & Subtle */}
+        {/* Error Alert */}
         <AnimatePresence>
           {error && (
             <motion.div 
@@ -87,9 +107,9 @@ export default function Home() {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div className="flex items-center gap-3 rounded-2xl border border-rose-100 bg-rose-50/50 px-6 py-4 backdrop-blur-sm">
-                <div className="h-2 w-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.4)]" />
-                <p className="text-sm font-bold text-rose-700">{error}</p>
+              <div className="flex items-center gap-3 rounded-2xl border border-rose-100 bg-white p-4 shadow-sm">
+                <div className="h-2 w-2 shrink-0 rounded-full bg-rose-500 animate-pulse" />
+                <p className="text-sm font-semibold text-rose-700">{error}</p>
               </div>
             </motion.div>
           )}
@@ -97,17 +117,22 @@ export default function Home() {
 
         {/* Dynamic Content Loading State */}
         {isLoading ? (
-          <div className="flex min-h-[450px] flex-col items-center justify-center rounded-[2.5rem] border border-slate-100 bg-white shadow-sm relative overflow-hidden">
+          <div className="flex min-h-[250px] sm:min-h-[300px] flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white relative overflow-hidden">
              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-50/50 to-transparent animate-[shimmer_2s_infinite]" />
-             <div className="relative flex h-20 w-20 items-center justify-center">
-              <div className="absolute h-full w-full animate-ping rounded-full bg-pink-500/10" />
-              <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-100 border-t-pink-500" />
+             <div className="relative flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center">
+              <div className="absolute h-full w-full animate-ping rounded-full bg-pink-600/20" />
+              <div className="h-6 w-6 sm:h-8 sm:w-8 animate-spin rounded-full border-4 border-slate-100 border-t-pink-600" />
             </div>
-            <p className="mt-6 text-xs font-black uppercase tracking-[0.3em] text-slate-400">Synchronizing Data</p>
           </div>
         ) : (
-          <div className="space-y-12">
-            {/* Cards with Staggered Entrance Feel */}
+          <div className="space-y-5 sm:space-y-6">
+            
+            {/* Task Spaces Header - Scaled for mobile */}
+            <div className="pt-2 sm:pt-4 px-1">
+               <h3 className="text-lg sm:text-xl font-bold text-slate-900">Task Spaces</h3>
+            </div>
+
+            {/* Dashboard Cards Section */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -116,24 +141,25 @@ export default function Home() {
               <DashboardCards stats={dashboard?.stats} />
             </motion.div>
 
-            {/* Main Layout Grid - Balanced Bento Style */}
+            {/* Main Layout Grid - Tasks & Activity */}
+            {/* RESPONSIVE: Stack on mobile, side-by-side on desktop */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="grid grid-cols-1 gap-10 xl:grid-cols-[1.8fr,1fr]"
+              className="grid grid-cols-1 gap-5 sm:gap-6 xl:grid-cols-[2fr,1fr]"
             >
-              <div className="rounded-[2.5rem] overflow-hidden bg-white/40 backdrop-blur-sm border border-white shadow-sm transition-all duration-300 hover:shadow-md">
+              {/* <div className="h-full">
                 <RecentTasks tasks={dashboard?.recent_tasks} isAdmin={isAdmin} />
               </div>
-              
-              <div className="rounded-[2.5rem] overflow-hidden bg-white/40 backdrop-blur-sm border border-white shadow-sm transition-all duration-300 hover:shadow-md">
+               */}
+              <div className="h-full">
                 <ActivityTimeline activities={dashboard?.activities} />
               </div>
             </motion.div>
             
-            {/* Floating Widget - Non-intrusive */}
-            <div className="fixed bottom-10 right-10 z-50">
+            {/* Floating Quick Chat Widget */}
+            <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
                <QuickChatWidget />
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { CheckSquare, LayoutDashboard, ListTodo, MessageSquare, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function BottomNav() {
   const location = useLocation();
@@ -13,8 +14,8 @@ export default function BottomNav() {
   ];
 
   return (
-    // Replaced max-w-sm with max-w-md for better tablet spacing, upgraded glassmorphism
-    <nav className="fixed bottom-6 left-1/2 z-50 flex h-16 w-[95%] sm:w-[85%] max-w-md -translate-x-1/2 items-center justify-between rounded-full border border-white/50 bg-white/80 px-2 backdrop-blur-2xl shadow-xl shadow-slate-200/40 md:hidden">
+    // UPGRADED: Refined the glassmorphism shadow to look like a premium iOS floating dock
+    <nav className="fixed bottom-6 left-1/2 z-50 flex h-16 w-[92%] max-w-md -translate-x-1/2 items-center justify-between rounded-full border border-slate-200/80 bg-white/90 px-1.5 backdrop-blur-xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] md:hidden">
       {navItems.map((item) => {
         const isActive = location.pathname.startsWith(item.path);
         const Icon = item.icon;
@@ -23,34 +24,36 @@ export default function BottomNav() {
           <Link
             key={item.name}
             to={item.path}
-            // Added flex-1 to distribute items evenly, group for hover states
-            className="group relative flex flex-1 flex-col items-center justify-center h-full active:scale-95 transition-transform duration-200"
-            style={{ WebkitTapHighlightColor: "transparent" }} // Removes blue tap highlight on mobile
+            // UPGRADED: Removed hover states (bad for touchscreens), kept the active:scale-95 tap bounce
+            className="relative flex flex-1 flex-col items-center justify-center h-full active:scale-95 transition-transform duration-200"
+            style={{ WebkitTapHighlightColor: "transparent" }} // Removes ugly blue tap highlight on Android
           >
-            {/* Animated Active Pill Background */}
-            <div
-              className={`absolute top-1 flex h-8 w-14 items-center justify-center rounded-full transition-all duration-300 ease-out ${
-                isActive
-                  ? "bg-[#E41F6A]/10 scale-100 opacity-100"
-                  : "bg-slate-100 scale-50 opacity-0 group-hover:scale-90 group-hover:opacity-100"
-              }`}
-            />
+            {/* THE "WOW" FACTOR: Framer Motion Sliding Pill */}
+            {/* Instead of fading in, this pill physically slides to the active tab */}
+            {isActive && (
+              <motion.div
+                layoutId="bottomNavIndicator"
+                className="absolute inset-y-1.5 inset-x-1 rounded-full bg-[#E41F6A]/10"
+                transition={{ 
+                  type: "spring", 
+                  stiffness: 400, 
+                  damping: 30 
+                }}
+              />
+            )}
 
-            {/* Icon with scaling and color transitions */}
+            {/* Icon: Becomes slightly thicker when active to make it pop */}
             <Icon
-              className={`relative z-10 mb-1 h-5 w-5 transition-all duration-300 ease-out ${
-                isActive
-                  ? "text-[#E41F6A] scale-110"
-                  : "text-slate-400 group-hover:text-slate-600 group-hover:scale-110"
+              className={`relative z-10 mb-0.5 h-[22px] w-[22px] transition-colors duration-300 ${
+                isActive ? "text-[#E41F6A]" : "text-slate-400"
               }`}
+              strokeWidth={isActive ? 2.5 : 2}
             />
 
-            {/* Text label with slight upward float on active */}
+            {/* Text label */}
             <span
-              className={`relative z-10 text-[10px] tracking-wide transition-all duration-300 ease-out ${
-                isActive
-                  ? "font-bold text-[#E41F6A] translate-y-0 opacity-100"
-                  : "font-medium text-slate-400 translate-y-0.5 opacity-90 group-hover:text-slate-600"
+              className={`relative z-10 text-[10px] tracking-wide transition-colors duration-300 ${
+                isActive ? "font-bold text-[#E41F6A]" : "font-medium text-slate-400"
               }`}
             >
               {item.name}

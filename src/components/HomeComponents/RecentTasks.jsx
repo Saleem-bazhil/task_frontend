@@ -1,150 +1,159 @@
-﻿import { Link } from "react-router-dom";
-import { ArrowRight, CalendarDays, Circle, LayOut, Plus } from "lucide-react";
+﻿import { CheckCircle2, Clock, MessageSquare, PlayCircle, PlusCircle } from "lucide-react";
+import { motion } from "framer-motion";
 
-// Professional Gradient Priority Tags
-function priorityClasses(priority) {
-  switch (priority) {
-    case "high":
-      return "bg-rose-50/50 text-rose-600 border-rose-100/50 ring-1 ring-rose-200/30 shadow-[0_2px_10px_-3px_rgba(225,29,72,0.2)]";
-    case "medium":
-      return "bg-amber-50/50 text-amber-600 border-amber-100/50 ring-1 ring-amber-200/30 shadow-[0_2px_10px_-3px_rgba(217,119,6,0.2)]";
-    case "low":
-      return "bg-emerald-50/50 text-emerald-600 border-emerald-100/50 ring-1 ring-emerald-200/30 shadow-[0_2px_10px_-3px_rgba(5,150,105,0.2)]";
-    default:
-      return "bg-slate-50 text-slate-500 border-slate-100";
+// Helper to map activity types to the exact mobile colors shown in your video
+const getActivityStyling = (action) => {
+  const actionLower = action?.toLowerCase() || "";
+  
+  if (actionLower.includes("complete")) {
+    return {
+      icon: CheckCircle2,
+      iconBg: "bg-emerald-50 border-emerald-200",
+      iconColor: "text-emerald-500",
+      badgeBg: "bg-emerald-50",
+      badgeText: "text-emerald-600",
+      label: "Completed"
+    };
   }
-}
-
-// Professional "Status Pill" with Micro-Glow
-function statusClasses(status) {
-  switch (status) {
-    case "completed":
-      return "bg-emerald-500 text-white shadow-[0_4px_12px_-2px_rgba(16,185,129,0.4)]";
-    case "in_progress":
-      return "bg-indigo-600 text-white shadow-[0_4px_12px_-2px_rgba(79,70,229,0.4)]";
-    case "pending":
-      return "bg-slate-700 text-white shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)]";
-    default:
-      return "bg-slate-400 text-white";
+  if (actionLower.includes("progress") || actionLower.includes("start")) {
+    return {
+      icon: PlayCircle,
+      iconBg: "bg-indigo-50 border-indigo-200",
+      iconColor: "text-indigo-500",
+      badgeBg: "bg-indigo-50",
+      badgeText: "text-indigo-600",
+      label: "In Progress"
+    };
   }
-}
+  if (actionLower.includes("create") || actionLower.includes("add")) {
+    return {
+      icon: PlusCircle,
+      iconBg: "bg-rose-50 border-rose-200",
+      iconColor: "text-rose-500",
+      badgeBg: "bg-rose-50",
+      badgeText: "text-rose-600",
+      label: "Created"
+    };
+  }
+  
+  // Default fallback (Pending/Update)
+  return {
+    icon: Clock,
+    iconBg: "bg-slate-50 border-slate-200",
+    iconColor: "text-slate-500",
+    badgeBg: "bg-slate-100",
+    badgeText: "text-slate-600",
+    label: "Updated"
+  };
+};
 
-function formatStatus(status) {
-  return status === "in_progress" ? "In Progress" : `${status?.charAt(0).toUpperCase()}${status?.slice(1)}`;
-}
+// Framer Motion staggered entrance animations
+const listVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
 
-export default function RecentTasks({ tasks = [], isAdmin }) {
+const itemVariants = {
+  hidden: { opacity: 0, x: 20 },
+  show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
+
+export default function ActivityTimeline({ activities = [] }) {
   return (
-    <div className="relative w-full rounded-[3rem] border border-slate-200/60 bg-[#FBFBFC] p-4 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)]">
+    <div className="relative flex h-full w-full flex-col rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow duration-500 hover:shadow-md">
       
-      {/* Header Section: Modern & Spacious */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-10 py-12">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <span className="h-[2px] w-8 bg-indigo-600 rounded-full" />
-            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-600/80">Active Workflow</span>
-          </div>
-          <h2 className="text-4xl font-extrabold tracking-tighter text-slate-900 lg:text-5xl">Recent Tasks</h2>
-          <p className="max-w-md text-sm font-medium leading-relaxed text-slate-500/80">
-            {isAdmin ? "Oversee latest assignments across the workspace." : "Stay updated on your current work trajectory."}
-          </p>
-        </div>
-        
-        <Link 
-          to="/app/my-tasks" 
-          className="group relative flex h-14 items-center justify-center overflow-hidden rounded-2xl bg-slate-900 px-8 text-sm font-bold text-white transition-all hover:bg-black hover:shadow-2xl active:scale-95"
-        >
-          <span className="relative z-10 flex items-center gap-3">
-            Explore All Tasks
-            <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-2" />
-          </span>
-          <div className="absolute inset-0 z-0 bg-gradient-to-r from-indigo-600 to-violet-600 opacity-0 transition-opacity duration-500 group-hover:opacity-10" />
-        </Link>
+      {/* Header Section - Exactly matching the mobile "Recent Updates" text */}
+      <div className="flex flex-col gap-1 border-b border-slate-100 p-5 md:p-6 lg:p-7">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-pink-600/80">
+          Recent Updates
+        </span>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 md:text-2xl">
+          Activity Feed
+        </h2>
+        <p className="mt-1 text-xs font-medium text-slate-500 md:text-sm">
+          A clear stream of movement across the work happening in your space.
+        </p>
       </div>
 
-      {tasks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-[2.5rem] bg-white border border-dashed border-slate-200 py-20">
-          <div className="rounded-full bg-slate-50 p-4 text-slate-300">
-            <LayOut className="h-8 w-8" />
+      {activities.length === 0 ? (
+        <div className="flex flex-col items-center justify-center bg-slate-50/30 py-16">
+          <div className="rounded-2xl bg-slate-100 p-4 text-slate-400">
+            <MessageSquare className="h-6 w-6" />
           </div>
-          <p className="mt-4 text-sm font-bold text-slate-400">Queue is currently empty</p>
+          <p className="mt-4 text-sm font-medium text-slate-500">No recent activity yet</p>
         </div>
       ) : (
-        <div className="overflow-x-auto pb-6">
-          <div className="inline-block min-w-full align-middle px-4">
-            {/* Custom Table Head (Floating) */}
-            <div className="grid grid-cols-5 px-10 mb-4 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
-              <div className="col-span-2">Task / Identity</div>
-              <div className="text-center">Complexity</div>
-              <div className="text-center">Current Phase</div>
-              <div className="text-right">Expected Date</div>
-            </div>
+        <div className="relative flex-1 p-5 md:p-6 lg:p-7 overflow-hidden">
+          
+          {/* The Continuous Vertical Timeline Line */}
+          <div className="absolute bottom-0 left-[37px] top-8 md:left-[41px] lg:left-[45px] w-[2px] bg-slate-100" />
 
-            {/* Task Rows as Bento Cards */}
-            <div className="space-y-3">
-              {tasks.map((task) => (
-                <div 
-                  key={task.id} 
-                  className="group grid grid-cols-5 items-center rounded-[2rem] border border-white bg-white px-8 py-6 shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all duration-500 hover:translate-y-[-4px] hover:border-slate-200 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.06)]"
+          <motion.div 
+            variants={listVariants}
+            initial="hidden"
+            animate="show"
+            className="flex flex-col gap-6"
+          >
+            {activities.map((activity, index) => {
+              const style = getActivityStyling(activity.action);
+              const Icon = style.icon;
+
+              return (
+                <motion.div 
+                  variants={itemVariants}
+                  key={activity.id || index} 
+                  // WOW EFFECT: Row hover creates a soft floating highlight without breaking the layout
+                  className="group relative flex gap-4 md:gap-5 items-start rounded-xl p-2 -mx-2 transition-colors duration-300 hover:bg-slate-50/80"
                 >
-                  {/* Task Info */}
-                  <div className="col-span-2 flex items-center gap-5">
-                    <div className="hidden sm:flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 transition-colors group-hover:bg-indigo-50 group-hover:text-indigo-600">
-                        <span className="text-xs font-black uppercase tracking-tighter">
-                             {task.title?.substring(0, 2)}
+                  
+                  {/* Icon Node matching mobile (Green Checkmark, etc.) */}
+                  <div className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white md:h-9 md:w-9">
+                    <div className={`flex h-6 w-6 md:h-7 md:w-7 items-center justify-center rounded-full border ${style.iconBg} ${style.iconColor} transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12`}>
+                      <Icon className="h-3.5 w-3.5 md:h-4 md:w-4" strokeWidth={2.5} />
+                    </div>
+                  </div>
+
+                  {/* Activity Content */}
+                  <div className="flex flex-1 flex-col pt-1">
+                    <div className="flex items-start justify-between gap-3">
+                      
+                      {/* Left: Task Title & Action */}
+                      <div className="flex flex-col min-w-0">
+                        <span className="truncate text-[15px] font-bold text-slate-900 transition-colors group-hover:text-slate-950">
+                          {activity.task_title || "Task Updated"}
                         </span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[17px] font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
-                        {task.title}
-                      </span>
-                      <span className="mt-0.5 line-clamp-1 text-xs font-semibold text-slate-400/80">
-                         {isAdmin ? `Assigned to ${task.user?.username || "Unassigned"}` : "Direct Assignment"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Priority */}
-                  <div className="flex justify-center">
-                    <span className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[10px] font-black uppercase tracking-widest ${priorityClasses(task.priority)}`}>
-                      <div className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
-                      {task.priority}
-                    </span>
-                  </div>
-
-                  {/* Status Badge */}
-                  <div className="flex justify-center">
-                    <span className={`rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] transition-transform duration-500 group-hover:scale-110 ${statusClasses(task.status)}`}>
-                      {formatStatus(task.status)}
-                    </span>
-                  </div>
-
-                  {/* Date/Timeline */}
-                  <div className="flex items-center justify-end gap-3">
-                    <div className="flex flex-col items-end">
-                      <span className="text-sm font-black text-slate-700">
-                        {task.due_date ? new Date(task.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "No Date"}
-                      </span>
-                      <div className="mt-1 flex items-center gap-1.5 text-[10px] font-bold text-slate-400">
-                         <CalendarDays className="h-3 w-3" />
-                         <span>Deadline</span>
+                        <p className="mt-0.5 text-[13px] text-slate-500 line-clamp-2">
+                          "{activity.task_title}" was {activity.action || "updated"}.
+                        </p>
                       </div>
+
+                      {/* Right: Mobile-style Badge (e.g., green "Completed") */}
+                      <span className={`shrink-0 rounded-md px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider md:px-3 md:py-1.5 md:text-[10px] ${style.badgeBg} ${style.badgeText} transition-shadow duration-300 group-hover:shadow-sm`}>
+                        {style.label}
+                      </span>
+                    </div>
+
+                    {/* Meta Data matching mobile: "BAZHIL • 25/3/2026, 10:02:05 pm" */}
+                    <div className="mt-2.5 flex items-center gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        {activity.user?.username || "SYSTEM"}
+                      </span>
+                      <span className="h-1 w-1 rounded-full bg-slate-300" />
+                      <span className="text-[11px] font-medium text-slate-400">
+                        {activity.created_at ? new Date(activity.created_at).toLocaleString('en-US', { 
+                          day: 'numeric', month: 'numeric', year: 'numeric', 
+                          hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true 
+                        }) : "Just now"}
+                      </span>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
+
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
       )}
-
-      {/* Subtle Footer Action */}
-      <div className="flex items-center justify-center p-6">
-         <button className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-400 transition-colors hover:text-indigo-600">
-            <Plus className="h-4 w-4" />
-            Quick Add New Task
-         </button>
-      </div>
     </div>
   );
 }
