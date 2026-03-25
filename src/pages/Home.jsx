@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { motion, AnimatePresence } from "framer-motion";
 
+=======
+>>>>>>> 180f6072a85de1789230b2e4ecd02c0f35f5f506
 import ActivityTimeline from "../components/HomeComponents/ActivityTimeline";
 import DashboardCards from "../components/HomeComponents/DashboardCards";
 import RecentTasks from "../components/HomeComponents/RecentTasks";
