@@ -1,4 +1,4 @@
-import { CalendarDays, CheckCircle2, Clock3, ListTodo, Mail, ShieldCheck, Sparkles, User2 } from "lucide-react";
+﻿import { CalendarDays, CheckCircle2, Clock3, ListTodo, Mail, ShieldCheck, Sparkles, User2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { useAuth } from "../context/useAuth";
@@ -105,14 +105,14 @@ export default function Profile() {
   return (
     <div className="mx-auto max-w-[1600px] space-y-8 p-6 md:p-8 lg:p-10 animate-fade-in">
       <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
-        <div className="bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.22),_transparent_34%),linear-gradient(135deg,_#0f172a,_#1e293b_55%,_#0ea5e9_140%)] px-8 py-10 text-white">
+        <div className="bg-[radial-gradient(circle_at_top_left,_rgba(228,31,106,0.22),_transparent_34%),linear-gradient(135deg,_#0f172a,_#1e293b_55%,_#e41f6a_140%)] px-8 py-10 text-white">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
               <div className="flex h-24 w-24 items-center justify-center rounded-[2rem] border border-white/20 bg-white/10 text-3xl font-semibold shadow-lg backdrop-blur">
                 {getInitials(user)}
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.32em] text-sky-100">Profile</p>
+                <p className="text-xs uppercase tracking-[0.32em] text-pink-100">Profile</p>
                 <h1 className="mt-3 text-3xl font-semibold tracking-tight">{fullName}</h1>
                 <div className="mt-3 flex flex-wrap gap-3 text-sm text-slate-100">
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
@@ -129,12 +129,12 @@ export default function Profile() {
 
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-3xl border border-white/15 bg-white/10 px-5 py-4 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.24em] text-sky-100">Completion</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-pink-100">Completion</p>
                 <p className="mt-2 text-3xl font-semibold">{derived.completionRate}%</p>
                 <p className="mt-1 text-sm text-slate-200">Tasks completed across your visible workload.</p>
               </div>
               <div className="rounded-3xl border border-white/15 bg-white/10 px-5 py-4 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.24em] text-sky-100">Focus</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-pink-100">Focus</p>
                 <p className="mt-2 text-3xl font-semibold">{derived.highPriorityOpen}</p>
                 <p className="mt-1 text-sm text-slate-200">High-priority open task{derived.highPriorityOpen === 1 ? "" : "s"}.</p>
               </div>
@@ -148,7 +148,7 @@ export default function Profile() {
               <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-slate-500">Total tasks</p>
-                  <ListTodo className="h-5 w-5 text-sky-600" />
+                  <ListTodo className="h-5 w-5 text-pink-600" />
                 </div>
                 <p className="mt-4 text-3xl font-semibold text-slate-900">{stats?.total ?? 0}</p>
               </div>
@@ -177,7 +177,7 @@ export default function Profile() {
 
             <div className="rounded-[1.75rem] border border-slate-200 bg-slate-50/70 p-6">
               <div className="flex items-center gap-3">
-                <div className="rounded-2xl bg-sky-100 p-3 text-sky-700">
+                <div className="rounded-2xl bg-pink-100 p-3 text-pink-700">
                   <User2 className="h-5 w-5" />
                 </div>
                 <div>
@@ -273,7 +273,7 @@ export default function Profile() {
                   </div>
                   <div className="h-2 rounded-full bg-slate-100">
                     <div
-                      className="h-2 rounded-full bg-sky-500"
+                      className="h-2 rounded-full bg-pink-500"
                       style={{ width: `${Math.max(((stats?.pending ?? 0) / Math.max(stats?.total ?? 1, 1)) * 100, 8)}%` }}
                     />
                   </div>
@@ -330,3 +330,4 @@ export default function Profile() {
     </div>
   );
 }
+

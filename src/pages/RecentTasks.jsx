@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 const RecentTasks = () => {
   const tasks = [
@@ -21,7 +21,7 @@ const RecentTasks = () => {
   const getStatusStyles = (status) => {
     switch (status) {
       case 'Completed': return 'bg-green-50 text-green-700 border-green-200';
-      case 'In Progress': return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'In Progress': return 'bg-pink-50 text-pink-700 border-pink-200';
       case 'Pending': return 'bg-gray-50 text-gray-700 border-gray-200';
       default: return 'bg-gray-50 text-gray-700 border-gray-200';
     }
@@ -31,7 +31,7 @@ const RecentTasks = () => {
     <div className="bg-white rounded-xl shadow-sm shadow-gray-200/50 border border-gray-100 overflow-hidden mb-8">
       <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-white">
         <h2 className="text-lg font-bold text-gray-800">Recent Tasks</h2>
-        <button className="text-sm text-blue-600 font-semibold hover:text-blue-700 transition-colors">View All</button>
+        <button className="text-sm text-pink-600 font-semibold hover:text-pink-700 transition-colors">View All</button>
       </div>
       
       <div className="overflow-x-auto">
@@ -71,3 +71,4 @@ const RecentTasks = () => {
 };
 
 export default RecentTasks;
+

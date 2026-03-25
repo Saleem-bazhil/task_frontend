@@ -1,13 +1,13 @@
-import { AlertTriangle, CheckCircle2, Clock3, UserPlus2 } from "lucide-react";
+﻿import { AlertTriangle, CheckCircle2, Clock3, UserPlus2 } from "lucide-react";
 
 function configFor(action) {
   switch (action) {
     case "completed":
       return { icon: CheckCircle2, color: "border-emerald-100 bg-emerald-50 text-emerald-700" };
     case "in_progress":
-      return { icon: Clock3, color: "border-indigo-100 bg-indigo-50 text-indigo-700" };
+      return { icon: Clock3, color: "border-pink-100 bg-pink-50 text-pink-700" };
     case "assigned":
-      return { icon: UserPlus2, color: "border-sky-100 bg-sky-50 text-sky-700" };
+      return { icon: UserPlus2, color: "border-pink-100 bg-pink-50 text-pink-700" };
     default:
       return { icon: AlertTriangle, color: "border-slate-100 bg-slate-50 text-slate-700" };
   }
@@ -54,3 +54,4 @@ export default function ActivityTimeline({ activities = [] }) {
     </div>
   );
 }
+

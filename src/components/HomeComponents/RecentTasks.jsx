@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { ArrowRight, CalendarDays } from "lucide-react";
 
 function priorityClasses(priority) {
@@ -19,7 +19,7 @@ function statusClasses(status) {
     case "completed":
       return "bg-emerald-100 text-emerald-700";
     case "in_progress":
-      return "bg-indigo-100 text-indigo-700";
+      return "bg-pink-100 text-pink-700";
     case "pending":
       return "bg-amber-100 text-amber-700";
     default:
@@ -41,7 +41,7 @@ export default function RecentTasks({ tasks = [], isAdmin }) {
             {isAdmin ? "Latest assignments across the workspace." : "Latest updates on your assigned work."}
           </p>
         </div>
-        <Link to="/app/my-tasks" className="inline-flex items-center gap-2 text-sm font-medium text-sky-700 transition hover:text-sky-900">
+        <Link to="/app/my-tasks" className="inline-flex items-center gap-2 text-sm font-medium text-pink-700 transition hover:text-pink-900">
           View Tasks
           <ArrowRight className="h-4 w-4" />
         </Link>
@@ -94,3 +94,4 @@ export default function RecentTasks({ tasks = [], isAdmin }) {
     </div>
   );
 }
+

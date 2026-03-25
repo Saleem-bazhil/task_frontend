@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { Search, Plus, X } from "lucide-react";
 
 const ConversationList = ({ onSelectRoom, activeRoom, currentUser }) => {
@@ -85,7 +85,7 @@ const ConversationList = ({ onSelectRoom, activeRoom, currentUser }) => {
               key={c.room_name}
               onClick={() => onSelectRoom(c.room_name)}
               className={`p-3 cursor-pointer ${
-                activeRoom === c.room_name ? "bg-blue-100" : ""
+                activeRoom === c.room_name ? "bg-pink-100" : ""
               }`}
             >
               {c.name}

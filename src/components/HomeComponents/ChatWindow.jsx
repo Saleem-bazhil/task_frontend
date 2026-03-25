@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 
 const ChatWindow = ({ room, currentUser }) => {
   const [messages, setMessages] = useState([]);
@@ -8,7 +8,7 @@ const ChatWindow = ({ room, currentUser }) => {
 
   const BASE = "http://127.0.0.1:8000";
 
-  // 📥 Fetch history
+  // ðŸ“¥ Fetch history
   useEffect(() => {
     if (!room) return;
 
@@ -25,7 +25,7 @@ const ChatWindow = ({ room, currentUser }) => {
       });
   }, [room, currentUser]);
 
-  // 🔌 WebSocket
+  // ðŸ”Œ WebSocket
   useEffect(() => {
     if (!room) return;
 
@@ -49,12 +49,12 @@ const ChatWindow = ({ room, currentUser }) => {
     return () => socket.close();
   }, [room, currentUser]);
 
-  // 🔽 scroll
+  // ðŸ”½ scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 📤 send
+  // ðŸ“¤ send
   const sendMessage = () => {
     if (!message.trim()) return;
 
@@ -89,7 +89,7 @@ const ChatWindow = ({ room, currentUser }) => {
         {messages.map(m => (
           <div key={m.id} className={m.isMe ? "text-right" : "text-left"}>
             <div className={`inline-block px-3 py-2 rounded m-1
-              ${m.isMe ? "bg-blue-500 text-white" : "bg-white border"}`}>
+              ${m.isMe ? "bg-pink-500 text-white" : "bg-white border"}`}>
               <b>{m.sender}</b><br/>
               {m.text}
             </div>
@@ -107,7 +107,7 @@ const ChatWindow = ({ room, currentUser }) => {
           placeholder="Type message..."
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button onClick={sendMessage} className="bg-blue-500 text-white px-4 rounded">
+        <button onClick={sendMessage} className="bg-pink-500 text-white px-4 rounded">
           Send
         </button>
       </div>
@@ -117,3 +117,4 @@ const ChatWindow = ({ room, currentUser }) => {
 };
 
 export default ChatWindow;
+
