@@ -18,6 +18,16 @@ export default function Messages() {
   const [mode, setMode] = useState("inbox");
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
   const [pageError, setPageError] = useState("");
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [isOverlayChatOpen, setIsOverlayChatOpen] = useState(false);
+
+  useEffect(() => {
+    const update = () => setIsDesktop(window.innerWidth >= 1280);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
 
   useEffect(() => {
     let cancelled = false;
@@ -71,6 +81,9 @@ export default function Messages() {
         setMode("inbox");
         setSearch("");
         setPageError("");
+        if (!isDesktop) {
+          setIsOverlayChatOpen(true);
+        }
       });
     } catch {
       setPageError("Unable to open that conversation right now.");
@@ -104,7 +117,9 @@ export default function Messages() {
   return (
     <div className="h-full bg-[linear-gradient(180deg,_#eff6ff,_#f8fafc_20%,_#f8fafc)] px-4 py-5 md:px-6 lg:px-8">
       <div className="mx-auto grid h-full max-w-[1700px] grid-cols-1 gap-5 xl:grid-cols-[380px_minmax(0,1fr)]">
-        <div className="min-h-[36rem] xl:h-[calc(100vh-9rem)]">
+        <div
+          className={`${isDesktop ? "block" : isOverlayChatOpen ? "hidden" : "block"} min-h-[36rem] xl:h-[calc(100vh-9rem)]`}
+        >
           <ConversationSidebar
             currentUser={user}
             users={users}
@@ -116,6 +131,9 @@ export default function Messages() {
             onOpenConversation={(conversation) => {
               setActiveConversation(conversation);
               setMode("inbox");
+              if (!isDesktop) {
+                setIsOverlayChatOpen(true);
+              }
             }}
             onCreateConversation={handleCreateConversation}
             search={search}
@@ -123,7 +141,9 @@ export default function Messages() {
           />
         </div>
 
-        <div className="min-h-[36rem] xl:h-[calc(100vh-9rem)]">
+        <div
+          className={`${isDesktop ? "block" : isOverlayChatOpen ? "block" : "hidden"} min-h-[36rem] xl:h-[calc(100vh-9rem)]`}
+        >
           {pageError ? (
             <div className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
               {pageError}
@@ -135,6 +155,7 @@ export default function Messages() {
             conversation={activeConversation}
             currentUser={user}
             onMessagePersisted={handleMessagePersisted}
+            onBack={!isDesktop ? () => setIsOverlayChatOpen(false) : undefined}
           />
         </div>
       </div>
