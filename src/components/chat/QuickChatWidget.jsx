@@ -38,9 +38,9 @@ export default function QuickChatWidget() {
         <div className="mb-4 flex h-[calc(100vh-160px)] min-h-[400px] max-h-[550px] w-[350px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg transition-all duration-300 sm:w-[400px]">
           {activeConversation ? (
             <div className="flex w-full h-full flex-col overflow-hidden [&>section]:!border-0 [&>section]:!shadow-none [&>section]:!rounded-none">
-              <ChatPanel 
-                conversation={activeConversation} 
-                currentUser={user} 
+              <ChatPanel
+                conversation={activeConversation}
+                currentUser={user}
                 onBack={() => setActiveConversation(null)}
               />
             </div>

@@ -13,22 +13,48 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-5 left-1/2 z-50 flex h-16 w-[92%] max-w-sm -translate-x-1/2 items-center justify-around rounded-full border border-white/60 bg-white/75 pb-0 pt-0 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] md:hidden">
+    // Replaced max-w-sm with max-w-md for better tablet spacing, upgraded glassmorphism
+    <nav className="fixed bottom-6 left-1/2 z-50 flex h-16 w-[95%] sm:w-[85%] max-w-md -translate-x-1/2 items-center justify-between rounded-full border border-white/50 bg-white/80 px-2 backdrop-blur-2xl shadow-xl shadow-slate-200/40 md:hidden">
       {navItems.map((item) => {
         const isActive = location.pathname.startsWith(item.path);
         const Icon = item.icon;
+        
         return (
           <Link
             key={item.name}
             to={item.path}
-            className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${
-              isActive ? "text-[#E41F6A]" : "text-slate-400 hover:text-slate-900"
-            }`}
+            // Added flex-1 to distribute items evenly, group for hover states
+            className="group relative flex flex-1 flex-col items-center justify-center h-full active:scale-95 transition-transform duration-200"
+            style={{ WebkitTapHighlightColor: "transparent" }} // Removes blue tap highlight on mobile
           >
-            <div className={`flex h-8 w-14 items-center justify-center rounded-full transition-colors ${isActive ? "bg-[#E41F6A]/10" : "bg-transparent"}`}>
-              <Icon className="h-5 w-5" />
-            </div>
-            <span className="text-[10px] font-medium">{item.name}</span>
+            {/* Animated Active Pill Background */}
+            <div
+              className={`absolute top-1 flex h-8 w-14 items-center justify-center rounded-full transition-all duration-300 ease-out ${
+                isActive
+                  ? "bg-[#E41F6A]/10 scale-100 opacity-100"
+                  : "bg-slate-100 scale-50 opacity-0 group-hover:scale-90 group-hover:opacity-100"
+              }`}
+            />
+
+            {/* Icon with scaling and color transitions */}
+            <Icon
+              className={`relative z-10 mb-1 h-5 w-5 transition-all duration-300 ease-out ${
+                isActive
+                  ? "text-[#E41F6A] scale-110"
+                  : "text-slate-400 group-hover:text-slate-600 group-hover:scale-110"
+              }`}
+            />
+
+            {/* Text label with slight upward float on active */}
+            <span
+              className={`relative z-10 text-[10px] tracking-wide transition-all duration-300 ease-out ${
+                isActive
+                  ? "font-bold text-[#E41F6A] translate-y-0 opacity-100"
+                  : "font-medium text-slate-400 translate-y-0.5 opacity-90 group-hover:text-slate-600"
+              }`}
+            >
+              {item.name}
+            </span>
           </Link>
         );
       })}

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import ActivityTimeline from "../components/HomeComponents/ActivityTimeline";
 import DashboardCards from "../components/HomeComponents/DashboardCards";
 import RecentTasks from "../components/HomeComponents/RecentTasks";
