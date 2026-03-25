@@ -35,7 +35,7 @@ export default function QuickChatWidget() {
   return (
     <div className="fixed bottom-24 right-4 z-[60] flex flex-col items-end md:bottom-10 md:right-10">
       {isOpen && (
-        <div className="mb-4 flex h-[calc(100vh-160px)] min-h-[400px] max-h-[550px] w-[350px] flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-2xl transition-all duration-300 sm:w-[400px]">
+        <div className="mb-4 flex h-[calc(100vh-160px)] min-h-[400px] max-h-[550px] w-[350px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg transition-all duration-300 sm:w-[400px]">
           {activeConversation ? (
             <div className="flex w-full h-full flex-col overflow-hidden [&>section]:!border-0 [&>section]:!shadow-none [&>section]:!rounded-none">
               <ChatPanel 
@@ -96,10 +96,20 @@ export default function QuickChatWidget() {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#E41F6A] text-white shadow-[0_8px_30px_rgba(228,31,106,0.3)] transition-transform hover:scale-105 hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-[#E41F6A]/20"
+        className="flex h-14 items-center justify-center gap-2.5 rounded-full bg-[#E41F6A] px-6 text-white shadow-md transition-colors hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-500/20"
         aria-label="Toggle Quick Chat"
       >
-        {isOpen ? <X className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
+        {isOpen ? (
+          <>
+            <X className="h-5 w-5" />
+            <span className="font-medium">Close</span>
+          </>
+        ) : (
+          <>
+            <MessageSquare className="h-5 w-5" />
+            <span className="font-medium">Quick Chat</span>
+          </>
+        )}
       </button>
     </div>
   );

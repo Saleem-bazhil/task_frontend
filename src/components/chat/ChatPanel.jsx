@@ -14,10 +14,10 @@ function upsertMessage(existingMessages, nextMessage) {
 
 function ConnectionBadge({ status }) {
   const config = {
-    connected: { icon: Wifi, label: "Connected", className: "bg-emerald-50 text-emerald-700" },
-    connecting: { icon: Wifi, label: "Connecting", className: "bg-amber-50 text-amber-700" },
-    reconnecting: { icon: Wifi, label: "Reconnecting", className: "bg-amber-50 text-amber-700" },
-    failed: { icon: WifiOff, label: "Connection failed", className: "bg-rose-50 text-rose-700" },
+    connected: { icon: Wifi, label: "Connected", className: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100" },
+    connecting: { icon: Wifi, label: "Connecting", className: "bg-amber-50 text-amber-700 ring-1 ring-amber-100" },
+    reconnecting: { icon: Wifi, label: "Reconnecting", className: "bg-amber-50 text-amber-700 ring-1 ring-amber-100" },
+    failed: { icon: WifiOff, label: "Connection failed", className: "bg-rose-50 text-rose-700 ring-1 ring-rose-100" },
     error: { icon: AlertCircle, label: "Socket error", className: "bg-rose-50 text-rose-700" },
     idle: { icon: WifiOff, label: "Offline", className: "bg-slate-100 text-slate-600" },
   }[status] || { icon: WifiOff, label: "Offline", className: "bg-slate-100 text-slate-600" };
@@ -106,12 +106,12 @@ export default function ChatPanel({ conversation, currentUser, onMessagePersiste
 
   if (!conversation) {
     return (
-      <section className="flex h-full items-center justify-center rounded-[2rem] border border-slate-200 bg-[linear-gradient(145deg,_rgba(255,255,255,0.95),_rgba(253,242,248,0.85))] p-10 text-center shadow-[0_30px_70px_-50px_rgba(228,31,106,0.4)]">
+      <section className="flex h-full items-center justify-center rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
         <div className="max-w-md">
-          <p className="text-xs uppercase tracking-[0.32em] text-pink-700">Messages</p>
-          <h2 className="mt-3 text-3xl font-semibold text-slate-900">Choose a conversation</h2>
+          <p className="text-xs uppercase tracking-wider text-slate-500 font-medium">Messages</p>
+          <h2 className="mt-3 text-2xl font-semibold text-slate-900">Choose a conversation</h2>
           <p className="mt-3 text-sm leading-6 text-slate-500">
-            Start with a teammate from the sidebar and the app will create or reuse the correct room automatically.
+            Start with a teammate from the sidebar to create or continue a room.
           </p>
         </div>
       </section>
@@ -119,8 +119,8 @@ export default function ChatPanel({ conversation, currentUser, onMessagePersiste
   }
 
   return (
-    <section className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_25px_70px_-45px_rgba(15,23,42,0.4)]">
-      <header className="flex shrink-0 items-center justify-between gap-4 border-b border-slate-200 bg-[linear-gradient(120deg,_#ffffff,_#f8fafc)] px-4 py-4 sm:px-6 sm:py-5">
+    <section className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm ring-1 ring-slate-100/50">
+      <header className="flex shrink-0 items-center justify-between gap-4 border-b border-slate-100 bg-white px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex items-center gap-2 sm:gap-3">
           {onBack && (
             <button
@@ -132,46 +132,55 @@ export default function ChatPanel({ conversation, currentUser, onMessagePersiste
             </button>
           )}
           <div>
-            <p className="text-[10px] uppercase tracking-[0.28em] text-pink-700 sm:text-xs">Active room</p>
-            <h2 className="mt-0.5 text-lg font-semibold text-slate-900 sm:mt-1 sm:text-xl">{conversation.other_user.username}</h2>
+            <p className="text-xs font-medium text-slate-500">Active chat</p>
+            <h2 className="mt-0.5 text-lg font-semibold text-slate-900 sm:mt-1 sm:text-xl">
+              {conversation.room_name || conversation.other_user?.username || "Chat"}
+            </h2>
           </div>
         </div>
         <ConnectionBadge status={status} />
       </header>
 
-      <div className="flex-1 overflow-y-auto bg-[linear-gradient(180deg,_#f8fafc,_#ffffff_26%,_#f8fafc)] px-4 py-6 sm:px-6">
+      <div className="flex-1 overflow-y-auto bg-white px-5 py-6 sm:px-6">
         {isLoading ? <p className="text-sm text-slate-500">Loading messages...</p> : null}
         {loadError ? <p className="mb-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{loadError}</p> : null}
 
-        <div className="space-y-3">
-          {messages.map((message) => {
-            const isOwnMessage = message.sender.id === currentUser.id;
-            return (
-              <article key={message.id} className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}>
-                <div
-                  className={`max-w-[78%] rounded-[1.7rem] px-4 py-3 shadow-sm ${
-                    isOwnMessage
-                      ? "rounded-br-md bg-pink-600 text-white"
-                      : "rounded-bl-md border border-slate-200 bg-white text-slate-900"
-                  }`}
-                >
-                  <p className={`text-xs font-medium ${isOwnMessage ? "text-pink-100" : "text-slate-500"}`}>
-                    {message.sender.username}
-                  </p>
-                  <p className="mt-1 whitespace-pre-wrap text-sm leading-6">{message.content}</p>
-                  <p className={`mt-2 text-[11px] ${isOwnMessage ? "text-pink-100" : "text-slate-400"}`}>
-                    {new Date(message.timestamp).toLocaleString()}
-                  </p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+        {messages.length === 0 && !isLoading && !loadError ? (
+          <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center text-sm text-slate-500">
+            <p className="text-slate-700 font-medium">No messages yet</p>
+            <p className="mt-1">Send the first message to start the conversation.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {messages.map((message) => {
+              const isOwnMessage = message.sender.id === currentUser.id;
+              return (
+                <article key={message.id} className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm ${
+                      isOwnMessage
+                        ? "rounded-br-sm bg-pink-600 text-white"
+                        : "rounded-bl-sm border border-slate-100 bg-slate-50 text-slate-900"
+                    }`}
+                  >
+                    <p className={`text-xs font-medium ${isOwnMessage ? "text-pink-100" : "text-slate-500"}`}>
+                      {message.sender.username}
+                    </p>
+                    <p className="mt-1 whitespace-pre-wrap text-sm leading-6">{message.content}</p>
+                    <p className={`mt-2 text-[11px] ${isOwnMessage ? "text-pink-100" : "text-slate-400"}`}>
+                      {new Date(message.timestamp).toLocaleString()}
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="border-t border-slate-200 bg-white px-4 py-4 sm:px-6">
-        <div className="flex items-end gap-3 rounded-[1.7rem] border border-slate-200 bg-slate-50 px-4 py-3">
+      <form onSubmit={handleSubmit} className="border-t border-slate-100 bg-white px-4 py-4 sm:px-6">
+        <div className="flex items-end gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
           <textarea
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
@@ -187,7 +196,7 @@ export default function ChatPanel({ conversation, currentUser, onMessagePersiste
           />
           <button
             type="submit"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-pink-600 text-white transition hover:bg-pink-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pink-600 text-white transition-colors hover:bg-pink-700 disabled:cursor-not-allowed disabled:bg-slate-200"
             disabled={!draft.trim() || status === "failed"}
           >
             <SendHorizonal className="h-4 w-4" />
