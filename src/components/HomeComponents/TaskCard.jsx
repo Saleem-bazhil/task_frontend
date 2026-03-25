@@ -24,24 +24,25 @@ const TaskCard = ({ task, isAccepted = false, isCompleted = false, onAccept, onS
   const getStatusBadge = (stat) => {
     switch(stat.toLowerCase()) {
       case 'completed': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-      case 'in_progress': return 'bg-indigo-50 text-indigo-700 border-indigo-200';
+      case 'in_progress': return 'bg-pink-50 text-pink-700 border-pink-200';
       case 'pending': return 'bg-amber-50 text-amber-700 border-amber-200';
       default: return 'bg-gray-50 text-gray-700 border-gray-200';
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-6 flex flex-col h-full relative group">
+    <div className="bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 border border-white/60 p-6 flex flex-col h-full relative group overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 to-transparent transition-opacity duration-300" />
       {/* Top Section */}
-      <div className="flex justify-between items-start mb-4">
-        <span className={`px-2.5 py-1 text-xs font-semibold rounded-md border ${getPriorityBadge(priority)}`}>
+      <div className="relative z-10 flex justify-between items-start mb-4">
+        <span className={`px-2.5 py-1 text-xs font-semibold rounded-md border backdrop-blur-sm ${getPriorityBadge(priority)}`}>
           {displayPriority} Priority
         </span>
       </div>
 
       {/* Content */}
       <div className="flex-grow">
-        <h3 className="text-lg font-bold text-gray-800 leading-tight mb-2 group-hover:text-indigo-600 transition-colors">
+        <h3 className="text-lg font-bold text-gray-800 leading-tight mb-2 group-hover:text-pink-600 transition-colors">
           {task.title}
         </h3>
         <p className="text-sm text-gray-500 line-clamp-2 mb-4 leading-relaxed">
@@ -64,7 +65,7 @@ const TaskCard = ({ task, isAccepted = false, isCompleted = false, onAccept, onS
         {/* Action Buttons */}
         <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
           {!isAccepted && !isCompleted && (
-             <button onClick={onAccept} type="button" className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-1.5">
+             <button onClick={onAccept} type="button" className="flex-1 bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4" />
               Accept Task
             </button>
@@ -72,7 +73,7 @@ const TaskCard = ({ task, isAccepted = false, isCompleted = false, onAccept, onS
 
           {isAccepted && !isCompleted && (
             <>
-              <button onClick={onStart} type="button" className="flex-1 bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 py-2 rounded-xl text-sm font-medium transition-colors flex justify-center items-center gap-1">
+              <button onClick={onStart} type="button" className="flex-1 bg-white hover:bg-pink-50 text-pink-700 border border-pink-200 py-2 rounded-xl text-sm font-medium transition-colors flex justify-center items-center gap-1">
                 <Play className="w-4 h-4" />
                 Start
               </button>

@@ -5,7 +5,7 @@ const CARD_CONFIG = [
     key: "total",
     title: "Total Tasks",
     icon: ListTodo,
-    color: "bg-sky-50 text-sky-700",
+    color: "bg-pink-50 text-pink-700",
     subtitle: "All visible tasks",
   },
   {
@@ -19,7 +19,7 @@ const CARD_CONFIG = [
     key: "in_progress",
     title: "In Progress",
     icon: PlayCircle,
-    color: "bg-indigo-50 text-indigo-700",
+    color: "bg-pink-50 text-pink-700",
     subtitle: "Active work now",
   },
   {
@@ -49,17 +49,18 @@ function StatCard({ title, count, icon, color, subtitle }) {
   const CardIcon = icon;
 
   return (
-    <div className="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div className="mb-5 flex items-start justify-between">
+    <div className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-white/60 bg-white/70 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.02)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/50 to-transparent transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="relative z-10 mb-5 flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-500">{title}</p>
-          <h3 className="mt-2 text-3xl font-semibold text-slate-900">{count}</h3>
+          <p className="text-sm font-medium text-slate-500 transition-colors group-hover:text-slate-700">{title}</p>
+          <h3 className="mt-2 text-3xl font-semibold text-slate-900 transition-colors group-hover:text-[#E41F6A]">{count}</h3>
         </div>
-        <div className={`rounded-2xl p-3 ${color}`}>
+        <div className={`rounded-2xl p-3 transition-transform duration-300 group-hover:scale-110 ${color}`}>
           <CardIcon className="h-6 w-6" />
         </div>
       </div>
-      <p className="text-sm text-slate-400">{subtitle}</p>
+      <p className="relative z-10 text-sm text-slate-400">{subtitle}</p>
     </div>
   );
 }
@@ -80,3 +81,4 @@ export default function DashboardCards({ stats }) {
     </div>
   );
 }
+

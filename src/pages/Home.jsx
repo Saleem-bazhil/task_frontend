@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ActivityTimeline from "../components/HomeComponents/ActivityTimeline";
 import DashboardCards from "../components/HomeComponents/DashboardCards";
 import RecentTasks from "../components/HomeComponents/RecentTasks";
+import QuickChatWidget from "../components/chat/QuickChatWidget";
 import { useAuth } from "../context/useAuth";
 import { fetchDashboard } from "../services/tasks";
 
@@ -44,8 +45,8 @@ export default function Home() {
 
   return (
     <div className="mx-auto max-w-[1600px] space-y-8 p-6 md:p-8 lg:p-10 animate-fade-in">
-      <section className="rounded-[2rem] border border-slate-200 bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.14),_transparent_32%),linear-gradient(135deg,_#ffffff,_#f8fafc)] p-8 shadow-sm">
-        <p className="text-xs uppercase tracking-[0.32em] text-sky-700">Overview</p>
+      <section className="rounded-[2rem] border border-slate-200 bg-[radial-gradient(circle_at_top_left,_rgba(228,31,106,0.14),_transparent_32%),linear-gradient(135deg,_#ffffff,_#f8fafc)] p-8 shadow-sm">
+        <p className="text-xs uppercase tracking-[0.32em] text-pink-700">Overview</p>
         <h2 className="mt-3 text-3xl font-semibold text-slate-900">
           Welcome back, {user?.username}
         </h2>
@@ -70,8 +71,11 @@ export default function Home() {
             <RecentTasks tasks={dashboard?.recent_tasks} isAdmin={isAdmin} />
             <ActivityTimeline activities={dashboard?.activities} />
           </div>
+          <QuickChatWidget />
         </>
       )}
     </div>
   );
 }
+
+

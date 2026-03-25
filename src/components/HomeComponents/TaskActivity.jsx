@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 const TaskActivity = () => {
   const activities = [
@@ -6,7 +6,7 @@ const TaskActivity = () => {
       id: 1,
       text: "Task 'UI Design' assigned by Admin",
       time: "2 hours ago",
-      iconClass: "bg-blue-100 text-blue-600 ring-blue-50",
+      iconClass: "bg-pink-100 text-pink-600 ring-pink-50",
       icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
     },
     {
@@ -57,3 +57,4 @@ const TaskActivity = () => {
 };
 
 export default TaskActivity;
+
