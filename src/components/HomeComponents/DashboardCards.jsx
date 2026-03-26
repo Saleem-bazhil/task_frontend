@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ChevronRight, Clock, ListTodo, PlayCircle, CheckCircle2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Refined Theme: Focused purely on color, glow, and lines (No physical scaling/bouncing)
 const TASK_SPACES = [
@@ -74,7 +75,16 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 400, damping: 30 } }
 };
 
+const ROUTES = {
+  open: "/app/my-tasks",
+  pending: "/app/my-tasks",
+  in_progress: "/app/accepted-tasks",
+  completed: "/app/completed-tasks",
+};
+
 export default function DashboardCards({ stats }) {
+  const navigate = useNavigate();
+
   return (
     <motion.div 
       variants={containerVariants}
@@ -83,14 +93,19 @@ export default function DashboardCards({ stats }) {
       className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-6"
     >
       {TASK_SPACES.map((card) => {
-        const count = stats?.[card.key] ?? (card.key === 'open' ? stats?.total : 0) ?? 0;
+        // Compute open as only active (pending + in_progress) so completed are NOT included
+        const openCount = (stats?.pending ?? 0) + (stats?.in_progress ?? 0);
+        const count = card.key === 'open' ? openCount : (stats?.[card.key] ?? 0);
         const Icon = card.icon;
 
         return (
           <motion.div
+            tabIndex={0}
+            role="button"
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { navigate(ROUTES[card.key] || '/app/home'); } }}
+            onClick={() => navigate(ROUTES[card.key] || '/app/home')}
             variants={itemVariants}
             key={card.key}
-            // REMOVED: hover:-translate-y-1. The card stays firmly planted.
             className={`group relative flex cursor-pointer items-center justify-between overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 xl:p-6 transition-all duration-300 ${card.theme.glowShadow} ${card.theme.glowBorder}`}
           >
             {/* The expanding accent line (Still acts as the primary visual feedback) */}
@@ -98,7 +113,6 @@ export default function DashboardCards({ stats }) {
 
             {/* Left Side: Icon & Text */}
             <div className="flex items-center gap-4 min-w-0 z-10">
-              {/* REMOVED: group-hover:scale-110 and rotation. Just smooth color transitions. */}
               <div className={`flex h-12 w-12 xl:h-14 xl:w-14 shrink-0 items-center justify-center rounded-[14px] ${card.theme.bg} ${card.theme.text} transition-colors duration-300 ${card.theme.hoverBg}`}>
                 <Icon className="h-6 w-6 xl:h-7 xl:w-7" strokeWidth={2.5} />
               </div>
@@ -118,7 +132,6 @@ export default function DashboardCards({ stats }) {
               <span className="text-2xl xl:text-3xl font-black text-slate-800 transition-colors duration-300 group-hover:text-slate-900">
                 {count}
               </span>
-              {/* Only the tiny chevron moves slightly, as an indicator to click */}
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-transparent transition-colors duration-300 group-hover:bg-slate-50">
                 <ChevronRight className="h-4 w-4 text-slate-300 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-slate-600" />
               </div>

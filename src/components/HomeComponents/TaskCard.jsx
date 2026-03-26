@@ -65,7 +65,7 @@ const TaskCard = ({ task, isAccepted = false, isCompleted = false, onAccept, onS
         {/* Action Buttons */}
         <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
           {!isAccepted && !isCompleted && (
-             <button onClick={onAccept} type="button" className="flex-1 bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-1.5">
+             <button onClick={() => onAccept && onAccept(task.id)} type="button" className="flex-1 bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4" />
               Accept Task
             </button>
@@ -73,11 +73,11 @@ const TaskCard = ({ task, isAccepted = false, isCompleted = false, onAccept, onS
 
           {isAccepted && !isCompleted && (
             <>
-              <button onClick={onStart} type="button" className="flex-1 bg-white hover:bg-pink-50 text-pink-700 border border-pink-200 py-2 rounded-xl text-sm font-medium transition-colors flex justify-center items-center gap-1">
+              <button onClick={() => onStart && onStart(task.id)} type="button" className="flex-1 bg-white hover:bg-pink-50 text-pink-700 border border-pink-200 py-2 rounded-xl text-sm font-medium transition-colors flex justify-center items-center gap-1">
                 <Play className="w-4 h-4" />
                 Start
               </button>
-              <button onClick={onComplete} type="button" className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-1">
+              <button onClick={() => onComplete && onComplete(task.id)} type="button" className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-1">
                 <CheckCircle2 className="w-4 h-4" />
                 Complete
               </button>
