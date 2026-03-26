@@ -1,4 +1,4 @@
-import { CheckCircle, CheckSquare, ChevronDown, LayoutDashboard, ListTodo, LogOut, MessageSquare, Sparkles, User } from "lucide-react";
+import { CheckCircle, CheckSquare, ChevronDown, LayoutDashboard, ListTodo, LogOut, MessageSquare, User } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -25,10 +25,10 @@ export default function Sidebar() {
       {/* Brand & User Profile Section */}
       <div className="flex flex-col gap-6 border-b border-slate-100 px-6 py-8">
         
-        {/* Renderways Logo - Removed hover scale */}
+        {/* Renderways Logo - replaced with brand image */}
         <Link to="/app/home" className="group flex items-center gap-3 w-fit">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#E41F6A]/10 text-[#E41F6A] transition-colors duration-300">
-            <Sparkles className="h-5 w-5" strokeWidth={2.5} />
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden bg-white">
+            <img src="/logo.jpeg" alt="Renderways" className="h-full w-full object-cover" />
             <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-white bg-emerald-500 animate-pulse" />
           </div>
           <span className="text-xl font-black tracking-tight text-slate-900 transition-colors group-hover:text-[#E41F6A]">
