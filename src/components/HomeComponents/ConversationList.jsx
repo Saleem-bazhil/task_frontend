@@ -1,5 +1,6 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Plus, X } from "lucide-react";
+import api from "../../api/Api";
 
 const ConversationList = ({ onSelectRoom, activeRoom, currentUser }) => {
   const [conversations, setConversations] = useState([]);
@@ -7,21 +8,19 @@ const ConversationList = ({ onSelectRoom, activeRoom, currentUser }) => {
   const [showNewChatList, setShowNewChatList] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const BASE = "http://127.0.0.1:8000";
-
   useEffect(() => {
-    fetch(`${BASE}/api/conversations/`)
-      .then(res => res.json())
-      .then(setConversations)
+    api
+      .get("/api/conversations/")
+      .then((res) => setConversations(res.data))
       .catch(console.error);
   }, []);
 
   const handleStartNewChat = async () => {
     try {
-      const res = await fetch(`${BASE}/api/users/`);
-      const data = await res.json();
+      const res = await api.get("/api/users/");
+      const data = res.data;
 
-      setAllUsers(data.filter(u => u.username !== currentUser));
+      setAllUsers(data.filter((u) => u.username !== currentUser));
       setShowNewChatList(true);
     } catch (err) {
       console.error(err);

@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import api from "../../api/Api";
 
 const ChatWindow = ({ room, currentUser }) => {
   const [messages, setMessages] = useState([]);
@@ -6,20 +7,18 @@ const ChatWindow = ({ room, currentUser }) => {
   const ws = useRef(null);
   const bottomRef = useRef(null);
 
-  const BASE = "http://127.0.0.1:8000";
-
   // ðŸ“¥ Fetch history
   useEffect(() => {
     if (!room) return;
 
-    fetch(`${BASE}/api/messages/${room}/`)
-      .then(res => res.json())
-      .then(data => {
-        const formatted = data.map(m => ({
+    api
+      .get(`/api/messages/${room}/`)
+      .then((res) => {
+        const formatted = res.data.map((m) => ({
           id: m.id,
           text: m.content,
           sender: m.sender,
-          isMe: m.sender === currentUser
+          isMe: m.sender === currentUser,
         }));
         setMessages(formatted);
       });
