@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { BASE_URL } from "../config/env";
+// import { BASE_URL } from "../config/env";
 import {
   clearAuthStorage,
   getAccessToken,
@@ -9,7 +9,7 @@ import {
 } from "../services/storage";
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: "https://taskapi.bazhilgroups.in",
 });
 
 let refreshPromise = null;
