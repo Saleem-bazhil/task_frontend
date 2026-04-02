@@ -12,6 +12,32 @@ function upsertMessage(existingMessages, nextMessage) {
   return [...existingMessages, nextMessage];
 }
 
+function isOwnMessage(message, currentUser) {
+  const senderId = message?.sender?.id ?? message?.sender_id ?? message?.sender;
+  const currentUserId = currentUser?.id;
+
+  if (senderId != null && currentUserId != null) {
+    return String(senderId) === String(currentUserId);
+  }
+
+  const senderUsername = message?.sender?.username ?? message?.sender_username;
+  const currentUsername = currentUser?.username;
+
+  if (senderUsername && currentUsername) {
+    return senderUsername.toLowerCase() === currentUsername.toLowerCase();
+  }
+
+  return false;
+}
+
+function getSenderName(message, isCurrentUser) {
+  if (isCurrentUser) {
+    return "You";
+  }
+
+  return message?.sender?.username ?? message?.sender_username ?? "Client";
+}
+
 function ConnectionBadge({ status }) {
   const config = {
     connected: { icon: Wifi, label: "Connected", className: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100" },
@@ -153,21 +179,21 @@ export default function ChatPanel({ conversation, currentUser, onMessagePersiste
         ) : (
           <div className="space-y-3">
             {messages.map((message) => {
-              const isOwnMessage = message.sender.id === currentUser.id;
+              const ownMessage = isOwnMessage(message, currentUser);
               return (
-                <article key={message.id} className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}>
+                <article key={message.id} className={`flex ${ownMessage ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm ${
-                      isOwnMessage
+                    className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm ${
+                      ownMessage
                         ? "rounded-br-sm bg-pink-600 text-white"
                         : "rounded-bl-sm border border-slate-100 bg-slate-50 text-slate-900"
                     }`}
                   >
-                    <p className={`text-xs font-medium ${isOwnMessage ? "text-pink-100" : "text-slate-500"}`}>
-                      {message.sender.username}
+                    <p className={`text-xs font-medium ${ownMessage ? "text-pink-100" : "text-slate-500"}`}>
+                      {getSenderName(message, ownMessage)}
                     </p>
                     <p className="mt-1 whitespace-pre-wrap text-sm leading-6">{message.content}</p>
-                    <p className={`mt-2 text-[11px] ${isOwnMessage ? "text-pink-100" : "text-slate-400"}`}>
+                    <p className={`mt-2 text-[11px] ${ownMessage ? "text-pink-100" : "text-slate-400"}`}>
                       {new Date(message.timestamp).toLocaleString()}
                     </p>
                   </div>
