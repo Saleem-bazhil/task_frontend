@@ -37,9 +37,12 @@ export function AuthProvider({ children }) {
     bootstrap();
   }, []);
 
+  const token = getAccessToken();
+
   const value = useMemo(
     () => ({
       user,
+      token,
       isAuthenticated: Boolean(user),
       isBootstrapping,
       async login(credentials) {
@@ -62,7 +65,7 @@ export function AuthProvider({ children }) {
         return updatedUser;
       },
     }),
-    [isBootstrapping, user]
+    [isBootstrapping, token, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

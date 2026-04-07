@@ -16,3 +16,21 @@ export async function fetchProfileOverview() {
     tasks: Array.isArray(tasksResponse.data) ? tasksResponse.data : [],
   };
 }
+
+export async function postComment(taskId, content) {
+  const response = await api.post("/api/comments/", { task: taskId, content });
+  return response.data;
+}
+
+export async function uploadAttachment(taskId, file) {
+  const formData = new FormData();
+  formData.append("task", taskId);
+  formData.append("file", file);
+  
+  const response = await api.post("/api/attachments/", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+}

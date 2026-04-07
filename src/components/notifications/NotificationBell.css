@@ -1,0 +1,85 @@
+.notification-container {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-bell {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+}
+
+.notification-bell:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+.notification-bell.active {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+
+.bell-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Unread Badge */
+.notification-badge {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+/* Connection Indicator */
+.connection-indicator {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #10b981;
+    border: 2px solid white;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    z-index: 10;
+}
+
+.connection-indicator.disconnected {
+    background-color: #ef4444;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+@media (max-width: 640px) {
+    .notification-bell {
+        padding: 6px;
+    }
+
+    .bell-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .notification-badge {
+        font-size: 10px;
+        padding: 1px 4px;
+        min-width: 18px;
+    }
+}

@@ -1,94 +1,299 @@
-import React from 'react';
-import { Calendar, CheckCircle2, Play } from 'lucide-react';
+import React from "react";
+import {
+  Calendar,
+  CheckCircle2,
+  Play,
+  MessageSquare,
+  User,
+  Paperclip,
+  AlertCircle,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
 
-const TaskCard = ({ task, isAccepted = false, isCompleted = false, onAccept, onStart, onComplete }) => {
+const PRIORITY_STYLES = {
+  high: {
+    card: "border-rose-200",
+    stripe: "bg-rose-500",
+    badge: "bg-rose-50 text-rose-700 border-rose-200",
+    dot: "bg-rose-500",
+  },
+  medium: {
+    card: "border-amber-200",
+    stripe: "bg-amber-400",
+    badge: "bg-amber-50 text-amber-700 border-amber-200",
+    dot: "bg-amber-400",
+  },
+  low: {
+    card: "border-emerald-200",
+    stripe: "bg-emerald-500",
+    badge: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    dot: "bg-emerald-500",
+  },
+};
+
+const STATUS_STYLES = {
+  pending: { badge: "bg-slate-100 text-slate-600", label: "Pending" },
+  in_progress: { badge: "bg-blue-100 text-blue-700", label: "In Progress" },
+  completed: { badge: "bg-emerald-100 text-emerald-700", label: "Completed" },
+};
+
+const TaskCard = ({
+  task,
+  isAccepted = false,
+  isCompleted = false,
+  onAccept,
+  onStart,
+  onComplete,
+  onCollaborate,
+  ownershipLabel = null,
+  showAcceptButton = true,
+}) => {
   if (!task) return null;
 
-  // Grab values from backend or fallback to defaults
-  const priority = task.priority || 'medium';
-  const status = task.status || 'pending';
+  const priority = (task.priority || "medium").toLowerCase();
+  const status = (task.status || "pending").toLowerCase();
+  const pStyles = PRIORITY_STYLES[priority] || PRIORITY_STYLES.medium;
+  const sStyles = STATUS_STYLES[status] || STATUS_STYLES.pending;
 
-  // Format strings for clean UI display
-  const displayPriority = priority.charAt(0).toUpperCase() + priority.slice(1);
-  const displayStatus = status === 'in_progress' ? 'In Progress' : status.charAt(0).toUpperCase() + status.slice(1);
-
-  const getPriorityBadge = (prio) => {
-    switch (prio.toLowerCase()) {
-      case 'high': return 'bg-rose-100 text-rose-700 border-rose-200';
-      case 'medium': return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'low': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
-    }
-  };
-
-  const getStatusBadge = (stat) => {
-    switch(stat.toLowerCase()) {
-      case 'completed': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-      case 'in_progress': return 'bg-pink-50 text-pink-700 border-pink-200';
-      case 'pending': return 'bg-amber-50 text-amber-700 border-amber-200';
-      default: return 'bg-gray-50 text-gray-700 border-gray-200';
-    }
-  };
+  const isOverdue =
+    task.due_date &&
+    new Date(task.due_date) < new Date() &&
+    status !== "completed";
+  const dueLabel = task.due_date
+    ? new Date(task.due_date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "No deadline";
+  const assigneeName = task.user?.full_name || task.user?.username;
+  const assigneeInitial = assigneeName
+    ? assigneeName.charAt(0).toUpperCase()
+    : "?";
 
   return (
-    <div className="bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 border border-white/60 p-6 flex flex-col h-full relative group overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 to-transparent transition-opacity duration-300" />
-      {/* Top Section */}
-      <div className="relative z-10 flex justify-between items-start mb-4">
-        <span className={`px-2.5 py-1 text-xs font-semibold rounded-md border backdrop-blur-sm ${getPriorityBadge(priority)}`}>
-          {displayPriority} Priority
-        </span>
-      </div>
+    <div
+      className={`group relative bg-white rounded-2xl border ${pStyles.card} shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col`}
+    >
+      {/* Priority stripe on the left */}
+      <div
+        className={`absolute left-0 top-0 bottom-0 w-1 ${pStyles.stripe} rounded-l-2xl`}
+      />
 
-      {/* Content */}
-      <div className="flex-grow">
-        <h3 className="text-lg font-bold text-gray-800 leading-tight mb-2 group-hover:text-pink-600 transition-colors">
-          {task.title}
-        </h3>
-        <p className="text-sm text-gray-500 line-clamp-2 mb-4 leading-relaxed">
-          {task.description}
-        </p>
-      </div>
-
-      {/* Footer Details */}
-      <div className="space-y-3 mt-auto">
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center text-gray-500">
-            <Calendar className="w-4 h-4 mr-1.5" />
-            <span>Due: <span className="text-gray-700 font-medium">{task.due_date ? new Date(task.due_date).toLocaleDateString() : 'TBD'}</span></span>
-          </div>
-          <span className={`px-2.5 py-1 text-xs font-medium rounded-full border ${getStatusBadge(status)}`}>
-            {displayStatus}
+      {/* Card Body */}
+      <div className="pl-5 pr-5 pt-5 pb-4 flex flex-col gap-3 flex-1">
+        {/* Row 1: Priority badge + Assignee */}
+        <div className="flex items-center justify-between gap-2">
+          <span
+            className={`inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-lg border ${pStyles.badge}`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${pStyles.dot}`} />
+            {priority.charAt(0).toUpperCase() + priority.slice(1)}
           </span>
+
+          <div className="flex items-center gap-1.5">
+            <div
+              className={`w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black shadow-sm border ${
+                task.user
+                  ? "bg-gradient-to-br from-pink-500 to-rose-600 text-white border-pink-300"
+                  : "bg-slate-100 text-slate-400 border-slate-200"
+              }`}
+            >
+              {assigneeInitial}
+            </div>
+            <span className="text-[11px] font-semibold text-slate-500 max-w-[100px] truncate">
+              {assigneeName || "Unassigned"}
+            </span>
+          </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
-          {!isAccepted && !isCompleted && (
-             <button onClick={() => onAccept && onAccept(task.id)} type="button" className="flex-1 bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4" />
-              Accept Task
-            </button>
+        {/* Row 2: Title + Description */}
+        <div>
+          <h3 className="text-base font-bold text-slate-800 leading-tight group-hover:text-pink-600 transition-colors line-clamp-2">
+            {task.title}
+          </h3>
+          {task.description && (
+            <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+              {task.description}
+            </p>
           )}
+        </div>
 
-          {isAccepted && !isCompleted && (
+        {/* Row 2.5: Ownership Information */}
+        {ownershipLabel && (
+          <div className="flex items-center gap-2 text-[10px] font-semibold">
+            <span className="text-slate-400 uppercase tracking-wider">
+              Ownership:
+            </span>
+            <span className="text-slate-600">{ownershipLabel}</span>
+          </div>
+        )}
+
+        {/* Row 3: Creator and Assignee Info */}
+        <div className="flex items-center justify-between gap-2 text-[10px]">
+          <div className="flex items-center gap-1">
+            <span className="text-slate-400 font-medium">Created by:</span>
+            <span className="text-slate-600 font-semibold">
+              {task.user?.full_name || task.user?.username || "Unknown"}
+            </span>
+          </div>
+          {task.assigned_by && (
+            <div className="flex items-center gap-1">
+              <span className="text-slate-400 font-medium">Assigned by:</span>
+              <span className="text-slate-600 font-semibold">
+                {task.assigned_by?.full_name ||
+                  task.assigned_by?.username ||
+                  "Unknown"}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Row 4: Activity Preview (if any) */}
+        {(task.comments_count > 0 || task.attachments_count > 0) && (
+          <div className="flex items-center gap-3 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100">
+            {task.comments_count > 0 && (
+              <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+                <MessageSquare className="w-3 h-3 text-pink-400" />
+                {task.comments_count} msg{task.comments_count !== 1 ? "s" : ""}
+              </div>
+            )}
+            {task.attachments_count > 0 && (
+              <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+                <Paperclip className="w-3 h-3 text-blue-400" />
+                {task.attachments_count} file
+                {task.attachments_count !== 1 ? "s" : ""}
+              </div>
+            )}
+            {task.last_message_preview && (
+              <p className="text-[10px] text-slate-400 italic truncate flex-1 border-l border-slate-200 pl-2">
+                <span className="font-bold not-italic text-slate-500">
+                  {task.last_message_preview.user}:
+                </span>{" "}
+                "{task.last_message_preview.content}"
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Row 4: Due Date + Status */}
+        <div className="flex items-center justify-between mt-auto">
+          <div
+            className={`flex items-center gap-1.5 text-xs font-medium ${isOverdue ? "text-rose-600" : "text-slate-400"}`}
+          >
+            {isOverdue ? (
+              <AlertCircle className="w-3.5 h-3.5" />
+            ) : (
+              <Calendar className="w-3.5 h-3.5" />
+            )}
+            <span>
+              {isOverdue ? "Overdue · " : ""}
+              {dueLabel}
+            </span>
+          </div>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${sStyles.badge}`}
+          >
+            {sStyles.label}
+          </span>
+        </div>
+      </div>
+
+      {/* Card Footer: Actions */}
+      <div className="border-t border-slate-100 px-5 py-3">
+        <div className="flex items-center gap-2">
+          {/* Unaccepted Task: View Details + Accept/Claim */}
+          {!isAccepted && !isCompleted && showAcceptButton && (
             <>
-              <button onClick={() => onStart && onStart(task.id)} type="button" className="flex-1 bg-white hover:bg-pink-50 text-pink-700 border border-pink-200 py-2 rounded-xl text-sm font-medium transition-colors flex justify-center items-center gap-1">
-                <Play className="w-4 h-4" />
-                Start
+              <button
+                onClick={() => onCollaborate && onCollaborate(task, "comments")}
+                type="button"
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-all"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                Details
               </button>
-              <button onClick={() => onComplete && onComplete(task.id)} type="button" className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-1">
-                <CheckCircle2 className="w-4 h-4" />
-                Complete
+              <button
+                onClick={() => onAccept && onAccept(task)}
+                type="button"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-pink-200"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                {task.user ? "Accept Task" : "Claim Task"}
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </>
           )}
-          
-          {isCompleted && (
-             <button disabled className="flex-1 bg-gray-50 text-gray-500 py-2 rounded-xl text-sm font-medium border border-gray-200 cursor-not-allowed flex justify-center items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4" />
-              Done
+
+          {/* Task Details Button (when accept button is hidden) */}
+          {!isAccepted && !isCompleted && !showAcceptButton && (
+            <button
+              onClick={() => onCollaborate && onCollaborate(task, "comments")}
+              type="button"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              View Details
             </button>
+          )}
+
+          {/* Active Task: Start + Complete + Discussion + Files */}
+          {isAccepted && !isCompleted && (
+            <>
+              <button
+                onClick={() => onCollaborate && onCollaborate(task, "comments")}
+                type="button"
+                className="relative flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-all"
+                title="Discussion"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                {task.comments_count > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-pink-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">
+                    {task.comments_count > 9 ? "9+" : task.comments_count}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => onCollaborate && onCollaborate(task, "files")}
+                type="button"
+                className="relative flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-all"
+                title="Files"
+              >
+                <Paperclip className="w-3.5 h-3.5" />
+                {task.attachments_count > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">
+                    {task.attachments_count > 9 ? "9+" : task.attachments_count}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => onComplete && onComplete(task.id)}
+                type="button"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-emerald-200"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Mark Complete
+              </button>
+            </>
+          )}
+
+          {/* Completed Task */}
+          {isCompleted && (
+            <>
+              <button
+                onClick={() => onCollaborate && onCollaborate(task, "comments")}
+                type="button"
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-400 bg-slate-50 border border-slate-100 rounded-xl transition-all hover:bg-slate-100"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                View
+              </button>
+              <div className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Completed
+              </div>
+            </>
           )}
         </div>
       </div>
