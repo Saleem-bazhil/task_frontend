@@ -10,6 +10,10 @@ import {
 
 const api = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 let refreshPromise = null;
@@ -60,7 +64,7 @@ api.interceptors.response.use(
     const access = await refreshPromise;
     originalRequest.headers.Authorization = `Bearer ${access}`;
     return api(originalRequest);
-  }
+  },
 );
 
 export default api;

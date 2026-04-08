@@ -24,12 +24,28 @@ const MyTasks = () => {
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const [createdRes, assignedRes] = await Promise.all([
-        api.get("/api/tasks/created-by-me/?status=pending"),
-        api.get("/api/tasks/assigned-to-me/?status=pending"),
-      ]);
-      setCreatedTasks(Array.isArray(createdRes.data) ? createdRes.data : []);
-      setAssignedTasks(Array.isArray(assignedRes.data) ? assignedRes.data : []);
+      const response = await api.get("/api/tasks/?status=pending");
+      const pendingTasks = Array.isArray(response.data) ? response.data : [];
+      const currentUserId = currentUser?.id;
+
+      const nextAssignedTasks = pendingTasks.filter((task) => {
+        const assignedToCurrentUser = Array.isArray(task.assigned_to)
+          ? task.assigned_to.some((assignee) => assignee.id === currentUserId)
+          : false;
+        const assignedByAnotherUser =
+          task.assigned_by && task.assigned_by.id !== currentUserId;
+        return assignedToCurrentUser && assignedByAnotherUser;
+      });
+
+      const nextCreatedTasks = pendingTasks.filter((task) => {
+        const createdByCurrentUser = task.user?.id === currentUserId;
+        const assignedByAnotherUser =
+          task.assigned_by && task.assigned_by.id !== currentUserId;
+        return createdByCurrentUser && !assignedByAnotherUser;
+      });
+
+      setCreatedTasks(nextCreatedTasks);
+      setAssignedTasks(nextAssignedTasks);
     } catch (err) {
       console.error("Could not load tasks", err);
       setError("Unable to fetch tasks from backend.");
@@ -40,7 +56,7 @@ const MyTasks = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [currentUser?.id]);
 
   const handleAcceptTask = async (task) => {
     try {
@@ -49,6 +65,9 @@ const MyTasks = () => {
         assigned_to_ids: [currentUser?.id],
       };
       await api.patch(`/api/tasks/${task.id}/`, payload);
+      setAssignedTasks((prevTasks) =>
+        prevTasks.filter((item) => item.id !== task.id),
+      );
 
       addToast(
         `Task "${task.title}" accepted! Redirecting to Active Tasks…`,
@@ -167,10 +186,7 @@ const MyTasks = () => {
               <TaskCard
                 key={task.id}
                 task={task}
-                onClick={() => {
-                  setSelectedTask(task);
-                  setIsModalOpen(true);
-                }}
+                onCollaborate={handleCollaborate}
                 showAcceptButton={false}
                 ownershipLabel="Created by you"
               />
@@ -214,10 +230,8 @@ const MyTasks = () => {
               <TaskCard
                 key={task.id}
                 task={task}
-                onClick={() => {
-                  setSelectedTask(task);
-                  setIsModalOpen(true);
-                }}
+                onCollaborate={handleCollaborate}
+                onAccept={handleAcceptTask}
                 showAcceptButton={true}
                 ownershipLabel="Assigned to you"
               />

@@ -4,8 +4,10 @@ import CollaborationModal from "../components/HomeComponents/CollaborationModal"
 import TaskCreationModal from "../components/HomeComponents/TaskCreationModal";
 import { CheckCircle2, Plus } from "lucide-react";
 import api from "../api/Api";
+import { getStoredUser } from "../services/storage";
 
 const CompletedTasks = () => {
+  const currentUser = getStoredUser();
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
   const [selectedTask, setSelectedTask] = useState(null);
@@ -16,7 +18,17 @@ const CompletedTasks = () => {
   const fetchCompletedTasks = async () => {
     try {
       const res = await api.get("/api/tasks/?status=completed");
-      setTasks(Array.isArray(res.data) ? res.data : []);
+      const items = Array.isArray(res.data) ? res.data : [];
+      const currentUserId = currentUser?.id;
+      setTasks(
+        items.filter((task) => {
+          const createdByCurrentUser = task.user?.id === currentUserId;
+          const assignedToCurrentUser = Array.isArray(task.assigned_to)
+            ? task.assigned_to.some((assignee) => assignee.id === currentUserId)
+            : false;
+          return createdByCurrentUser || assignedToCurrentUser;
+        }),
+      );
     } catch (err) {
       console.error("Could not load completed tasks", err);
       setError("Unable to fetch completed tasks from backend.");
@@ -25,7 +37,7 @@ const CompletedTasks = () => {
 
   useEffect(() => {
     fetchCompletedTasks();
-  }, []);
+  }, [currentUser?.id]);
 
   const handleCollaborate = (task, tab = "comments") => {
     setSelectedTask(task);

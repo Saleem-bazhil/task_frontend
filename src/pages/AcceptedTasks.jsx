@@ -5,9 +5,11 @@ import TaskCreationModal from "../components/HomeComponents/TaskCreationModal";
 import api from "../api/Api";
 import { useToast } from "../context/ToastContext";
 import { Plus } from "lucide-react";
+import { getStoredUser } from "../services/storage";
 
 const AcceptedTasks = () => {
   const { addToast } = useToast();
+  const currentUser = getStoredUser();
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
   const [selectedTask, setSelectedTask] = useState(null);
@@ -18,7 +20,15 @@ const AcceptedTasks = () => {
   const fetchAcceptedTasks = async () => {
     try {
       const res = await api.get("/api/tasks/?status=in_progress");
-      setTasks(Array.isArray(res.data) ? res.data : []);
+      const items = Array.isArray(res.data) ? res.data : [];
+      const currentUserId = currentUser?.id;
+      setTasks(
+        items.filter((task) =>
+          Array.isArray(task.assigned_to)
+            ? task.assigned_to.some((assignee) => assignee.id === currentUserId)
+            : false,
+        ),
+      );
     } catch (err) {
       console.error("Could not load active tasks", err);
       setError("Unable to fetch active tasks from backend.");
@@ -27,7 +37,7 @@ const AcceptedTasks = () => {
 
   useEffect(() => {
     fetchAcceptedTasks();
-  }, []);
+  }, [currentUser?.id]);
 
   const handleCompleteTask = async (taskId) => {
     try {
