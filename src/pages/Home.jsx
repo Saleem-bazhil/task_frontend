@@ -192,9 +192,11 @@ export default function Home() {
         <TaskCreationModal
           isOpen={isCreationModalOpen}
           onClose={() => setIsCreationModalOpen(false)}
-          onTaskCreated={() => {
-            // Refresh dashboard when task is created
-            location.reload();
+          onTaskCreated={async () => {
+            try {
+              const response = await fetchDashboard();
+              setDashboard(response);
+            } catch { /* toast already shown in context */ }
           }}
         />
       </motion.div>

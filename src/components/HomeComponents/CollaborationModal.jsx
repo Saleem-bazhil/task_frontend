@@ -228,6 +228,38 @@ const CollaborationModal = ({
                 <h2 className="text-base font-bold text-slate-800 truncate">
                   {task.title}
                 </h2>
+                <div className="flex items-center gap-3 mt-0.5">
+                  {task.user && (
+                    <span className="text-[10px] text-slate-400 font-medium">
+                      Created by{" "}
+                      <span className="text-slate-600 font-bold">
+                        {task.user.full_name || task.user.username}
+                      </span>
+                    </span>
+                  )}
+                  {task.assigned_by && (
+                    <>
+                      <span className="text-[10px] text-slate-300">·</span>
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        Assigned by{" "}
+                        <span className="text-slate-600 font-bold">
+                          {task.assigned_by.full_name || task.assigned_by.username}
+                        </span>
+                      </span>
+                    </>
+                  )}
+                  {task.assigned_to?.length > 0 && (
+                    <>
+                      <span className="text-[10px] text-slate-300">·</span>
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        Assigned to{" "}
+                        <span className="text-slate-600 font-bold">
+                          {task.assigned_to.map((u) => u.full_name || u.username).join(", ")}
+                        </span>
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
 
