@@ -150,7 +150,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
     {
       value: "low",
       label: "Low",
-      color: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      color: "bg-green-50 text-green-700 border-green-200",
     },
     {
       value: "medium",
@@ -160,7 +160,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
     {
       value: "high",
       label: "High",
-      color: "bg-rose-50 text-rose-700 border-rose-200",
+      color: "bg-red-50 text-red-700 border-red-200",
     },
   ];
 
@@ -220,12 +220,12 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                     disabled={submitting}
                     className={`w-full px-4 py-3 rounded-xl border-2 transition-all placeholder-slate-300 focus:outline-none ${
                       errors.title
-                        ? "border-rose-300 focus:border-rose-500 bg-rose-50"
-                        : "border-slate-200 focus:border-pink-500 bg-slate-50"
+                        ? "border-red-300 focus:border-red-500 bg-red-50"
+                        : "border-slate-200 focus:border-indigo-500 bg-slate-50"
                     }`}
                   />
                   {errors.title && (
-                    <p className="text-sm text-rose-600 mt-2 flex items-center gap-1">
+                    <p className="text-sm text-red-600 mt-2 flex items-center gap-1">
                       <AlertCircle className="w-4 h-4" />
                       {errors.title}
                     </p>
@@ -244,7 +244,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                     placeholder="Add task details, requirements, or notes..."
                     disabled={submitting}
                     rows="4"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-pink-500 bg-slate-50 focus:outline-none placeholder-slate-300 transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-500 bg-slate-50 focus:outline-none placeholder-slate-300 transition-all resize-none"
                   />
                 </div>
 
@@ -289,7 +289,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                     value={formData.due_date}
                     onChange={handleInputChange}
                     disabled={submitting}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-pink-500 bg-slate-50 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-500 bg-slate-50 focus:outline-none transition-all"
                   />
                 </div>
 
@@ -305,7 +305,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                       type="button"
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                       disabled={submitting || loadingUsers}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-pink-500 bg-slate-50 focus:outline-none text-left flex items-center justify-between text-slate-700 disabled:opacity-50 transition-all"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-500 bg-slate-50 focus:outline-none text-left flex items-center justify-between text-slate-700 disabled:opacity-50 transition-all"
                     >
                       <span
                         className={
@@ -341,14 +341,14 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                               onClick={() => handleUserToggle(user.id)}
                               className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 ${
                                 formData.assigned_to_ids.includes(user.id)
-                                  ? "bg-pink-50"
+                                  ? "bg-indigo-50"
                                   : ""
                               }`}
                             >
                               <div
                                 className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                                   formData.assigned_to_ids.includes(user.id)
-                                    ? "bg-pink-500 border-pink-500"
+                                    ? "bg-indigo-500 border-indigo-500"
                                     : "border-slate-300"
                                 }`}
                               >
@@ -389,13 +389,13 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                         return (
                           <div
                             key={userId}
-                            className="inline-flex items-center gap-2 bg-pink-100 border border-pink-200 text-pink-700 px-3 py-1.5 rounded-lg text-sm font-semibold"
+                            className="inline-flex items-center gap-2 bg-indigo-100 border border-indigo-200 text-indigo-700 px-3 py-1.5 rounded-lg text-sm font-semibold"
                           >
                             {user?.full_name || user?.username}
                             <button
                               type="button"
                               onClick={() => handleUserToggle(userId)}
-                              className="ml-1 hover:text-pink-900"
+                              className="ml-1 hover:text-indigo-900"
                             >
                               ✕
                             </button>
@@ -419,7 +419,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="flex-1 px-4 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-3 rounded-xl font-semibold text-white bg-indigo-500 hover:bg-indigo-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {submitting ? (
                       <>
