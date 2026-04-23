@@ -2,12 +2,9 @@ import React from "react";
 import {
   Calendar,
   CheckCircle2,
-  Play,
   MessageSquare,
-  User,
   Paperclip,
   AlertCircle,
-  Clock,
   ArrowRight,
 } from "lucide-react";
 
@@ -67,19 +64,31 @@ const TaskCard = ({
         year: "numeric",
       })
     : "No deadline";
-  const assigneeName = task.user?.full_name || task.user?.username;
-  const assigneeInitial = assigneeName
-    ? assigneeName.charAt(0).toUpperCase()
-    : "?";
+
+  const assignees = Array.isArray(task.assigned_to) ? task.assigned_to : [];
+  const assigneeLabel = assignees.length
+    ? assignees
+        .map((user) => user.full_name || user.username)
+        .filter(Boolean)
+        .join(", ")
+    : "Unassigned";
+  const assigneeInitial = assigneeLabel.charAt(0).toUpperCase() || "?";
+  const creatorName = task.user?.full_name || task.user?.username || "Unknown";
+  const assignedByName =
+    task.assigned_by?.full_name || task.assigned_by?.username || "—";
+  const updatedAt = task.updated_at
+    ? new Date(task.updated_at).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      })
+    : "—";
 
   return (
     <div
       className={`group relative bg-white rounded-xl border ${pStyles.card} overflow-hidden flex flex-col w-full`}
     >
       {/* Priority stripe on the left */}
-      <div
-        className={`absolute left-0 top-0 bottom-0 w-1 ${pStyles.stripe}`}
-      />
+      <div className={`absolute left-0 top-0 bottom-0 w-1 ${pStyles.stripe}`} />
 
       {/* Card Body - Tighter padding and gaps for reduced size */}
       <div className="p-3.5 pl-4 flex flex-col gap-2.5 flex-1">
@@ -95,7 +104,7 @@ const TaskCard = ({
           <div className="flex items-center gap-1.5">
             <div
               className={`w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black border ${
-                task.user
+                assignees.length > 0
                   ? "bg-gradient-to-br from-pink-500 to-rose-600 text-white border-pink-300"
                   : "bg-slate-100 text-slate-400 border-slate-200"
               }`}
@@ -103,7 +112,7 @@ const TaskCard = ({
               {assigneeInitial}
             </div>
             <span className="text-[10px] font-semibold text-slate-500 max-w-[80px] sm:max-w-[100px] truncate">
-              {assigneeName || "Unassigned"}
+              {assigneeLabel}
             </span>
           </div>
         </div>
@@ -130,24 +139,31 @@ const TaskCard = ({
           </div>
         )}
 
-        {/* Row 3: Creator and Assignee Info */}
-        <div className="flex items-center justify-between gap-2 text-[9px] flex-wrap">
-          <div className="flex items-center gap-1">
+        <div className="space-y-2 text-[10px] text-slate-600">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-slate-800">Assigned to:</span>
+            <span className="truncate">{assigneeLabel}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-slate-800">Assigned by:</span>
+            <span className="truncate">{assignedByName}</span>
+          </div>
+        </div>
+
+        {/* Row 3: Creator and Timestamp Info */}
+        <div className="grid grid-cols-1 gap-2 text-[10px] text-slate-600 sm:grid-cols-2">
+          <div className="flex items-center gap-2">
             <span className="text-slate-400 font-medium">Created by:</span>
-            <span className="text-slate-600 font-semibold truncate max-w-[80px]">
-              {task.user?.full_name || task.user?.username || "Unknown"}
+            <span className="text-slate-800 font-semibold truncate">
+              {creatorName}
             </span>
           </div>
-          {task.assigned_by && (
-            <div className="flex items-center gap-1">
-              <span className="text-slate-400 font-medium">Assigned by:</span>
-              <span className="text-slate-600 font-semibold truncate max-w-[80px]">
-                {task.assigned_by?.full_name ||
-                  task.assigned_by?.username ||
-                  "Unknown"}
-              </span>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            <span className="text-slate-400 font-medium">Updated:</span>
+            <span className="text-slate-800 font-semibold truncate">
+              {updatedAt}
+            </span>
+          </div>
         </div>
 
         {/* Row 4: Activity Preview (if any) */}
