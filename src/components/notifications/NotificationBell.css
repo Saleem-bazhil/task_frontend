@@ -5,81 +5,102 @@
 
 .notification-bell {
     position: relative;
-    background: none;
-    border: none;
+    width: 48px;
+    height: 48px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     cursor: pointer;
-    padding: 8px;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #64748b;
-    transition: all 0.2s ease;
-    border-radius: 6px;
+    color: #334155;
+    transition: all 0.22s ease;
+    border-radius: 999px;
+    box-shadow: 0 10px 24px -18px rgba(15, 23, 42, 0.45);
 }
 
 .notification-bell:hover {
-    background-color: #f1f5f9;
-    color: #1e293b;
+    background: #fff1f2;
+    border-color: #fecdd3;
+    color: #e11d48;
+    box-shadow: 0 16px 32px -18px rgba(225, 29, 72, 0.35);
+    transform: translateY(-1px);
 }
 
 .notification-bell.active {
-    background-color: #e2e8f0;
-    color: #1e293b;
+    background: linear-gradient(135deg, #ec4899, #e11d48);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 18px 36px -18px rgba(236, 72, 153, 0.55);
+}
+
+.notification-bell:focus-visible {
+    outline: 3px solid rgba(236, 72, 153, 0.22);
+    outline-offset: 3px;
 }
 
 .bell-icon {
-    width: 24px;
-    height: 24px;
+    width: 23px;
+    height: 23px;
+    color: currentColor;
+    stroke: currentColor;
+    opacity: 1;
 }
 
-/* Unread Badge */
 .notification-badge {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    background: #ef4444;
+    top: -4px;
+    right: -4px;
+    background: #f59e0b;
     color: white;
     font-size: 11px;
-    font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 10px;
-    min-width: 20px;
+    font-weight: 800;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 999px;
+    min-width: 21px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+    border: 2px solid #ffffff;
+    box-shadow: 0 10px 18px -10px rgba(245, 158, 11, 0.8);
 }
 
-/* Connection Indicator */
 .connection-indicator {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 12px;
-    height: 12px;
+    bottom: 5px;
+    right: 5px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
     background-color: #10b981;
     border: 2px solid white;
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
     z-index: 10;
 }
 
+.notification-bell.active .connection-indicator {
+    border-color: #ec4899;
+}
+
 .connection-indicator.disconnected {
-    background-color: #ef4444;
-    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+    background-color: #e11d48;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.16);
 }
 
 @media (max-width: 640px) {
     .notification-bell {
-        padding: 6px;
+        width: 44px;
+        height: 44px;
     }
 
     .bell-icon {
-        width: 20px;
-        height: 20px;
+        width: 21px;
+        height: 21px;
     }
 
     .notification-badge {
         font-size: 10px;
-        padding: 1px 4px;
-        min-width: 18px;
+        min-width: 19px;
+        padding: 3px 5px;
     }
 }
