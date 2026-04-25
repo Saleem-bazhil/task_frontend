@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CheckCircle2,
   ChevronRight,
@@ -58,17 +59,37 @@ const FALLBACK_META = {
 
 const NotificationItem = ({ notification, onClose }) => {
   const { markAsRead } = useNotifications();
+  const navigate = useNavigate();
   const meta = EVENT_META[notification.event_type] || FALLBACK_META;
   const Icon = meta.Icon;
+
+  const resolveTaskRoute = () => {
+    const status = (notification.task_status || notification.status || "").toLowerCase();
+    const eventType = notification.event_type || "";
+
+    if (status === "completed" || eventType === "task_completed") {
+      return "/app/completed-tasks";
+    }
+
+    if (
+      status === "in_progress" ||
+      eventType === "task_status_changed" ||
+      eventType === "comment_added"
+    ) {
+      return "/app/accepted-tasks";
+    }
+
+    return "/app/my-tasks";
+  };
 
   const handleClick = () => {
     if (!notification.is_read) {
       markAsRead(notification.id);
     }
-    // Navigate to task if available
+
     if (notification.task_id) {
       onClose();
-      window.location.href = `/tasks/${notification.task_id}`;
+      navigate(resolveTaskRoute());
     }
   };
 
