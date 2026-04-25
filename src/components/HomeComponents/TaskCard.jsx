@@ -1,13 +1,14 @@
 import React from "react";
 import {
-  Calendar,
-  CheckCircle2,
-  MessageSquare,
-  Paperclip,
   AlertCircle,
   ArrowRight,
+  Calendar,
+  CheckCircle2,
+  ChevronRight,
   Clock,
-  History,
+  MessageSquare,
+  Paperclip,
+  Users,
 } from "lucide-react";
 
 const PRIORITY_STYLES = {
@@ -16,38 +17,93 @@ const PRIORITY_STYLES = {
     text: "text-rose-600",
     border: "border-rose-100",
     dot: "bg-rose-500",
+    accent: "from-rose-500 via-pink-500 to-orange-400",
+    glow: "group-hover:shadow-rose-500/15",
   },
   medium: {
     bg: "bg-amber-50",
     text: "text-amber-600",
     border: "border-amber-100",
     dot: "bg-amber-500",
+    accent: "from-amber-400 via-orange-400 to-pink-400",
+    glow: "group-hover:shadow-amber-500/15",
   },
   low: {
     bg: "bg-slate-50",
     text: "text-slate-600",
     border: "border-slate-200",
     dot: "bg-slate-400",
+    accent: "from-sky-400 via-slate-400 to-emerald-400",
+    glow: "group-hover:shadow-sky-500/10",
   },
 };
 
 const STATUS_STYLES = {
-  pending: { bg: "bg-slate-50", text: "text-slate-600", border: "border-slate-200", label: "Pending" },
-  in_progress: { bg: "bg-pink-50", text: "text-pink-600", border: "border-pink-200", label: "In Progress" },
-  completed: { bg: "bg-emerald-50", text: "text-emerald-600", border: "border-emerald-200", label: "Completed" },
-  overdue: { bg: "bg-rose-50", text: "text-rose-600", border: "border-rose-200", label: "Overdue" },
+  pending: {
+    bg: "bg-slate-50",
+    text: "text-slate-600",
+    border: "border-slate-200",
+    label: "Pending",
+  },
+  in_progress: {
+    bg: "bg-pink-50",
+    text: "text-pink-600",
+    border: "border-pink-200",
+    label: "In Progress",
+  },
+  completed: {
+    bg: "bg-emerald-50",
+    text: "text-emerald-600",
+    border: "border-emerald-200",
+    label: "Completed",
+  },
+  overdue: {
+    bg: "bg-rose-50",
+    text: "text-rose-600",
+    border: "border-rose-200",
+    label: "Overdue",
+  },
 };
 
 const Avatar = ({ name, colorClass = "bg-slate-100 text-slate-600" }) => {
-  const initial = name && name.length > 0 ? name.trim().charAt(0).toUpperCase() : "?";
+  const initial =
+    name && name.length > 0 ? name.trim().charAt(0).toUpperCase() : "?";
+
   return (
     <div
-      className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-white shadow-sm shrink-0 transition-transform duration-300 group-hover:scale-105 ${colorClass}`}
+      className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm shrink-0 transition-transform duration-300 group-hover:scale-105 ${colorClass}`}
       title={name}
     >
       {initial}
     </div>
   );
+};
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return "-";
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
+const getDaysLeftLabel = (dateStr, isOverdue) => {
+  if (!dateStr) return "No due date";
+
+  const today = new Date();
+  const due = new Date(dateStr);
+  today.setHours(0, 0, 0, 0);
+  due.setHours(0, 0, 0, 0);
+  const days = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+
+  if (isOverdue) {
+    const lateDays = Math.abs(days);
+    return `${lateDays} day${lateDays === 1 ? "" : "s"} late`;
+  }
+  if (days === 0) return "Due today";
+  if (days === 1) return "Due tomorrow";
+  return `${days} days left`;
 };
 
 const TaskCard = ({
@@ -64,7 +120,6 @@ const TaskCard = ({
 
   const priority = (task.priority || "medium").toLowerCase();
   const status = (task.status || "pending").toLowerCase();
-
   const isOverdue =
     task.due_date &&
     new Date(task.due_date) < new Date() &&
@@ -75,18 +130,6 @@ const TaskCard = ({
     ? STATUS_STYLES.overdue
     : STATUS_STYLES[status] || STATUS_STYLES.pending;
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "—";
-    return new Date(dateStr).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
-  const dueLabel = formatDate(task.due_date);
-  const createdAt = formatDate(task.created_at);
-
   const assignees = Array.isArray(task.assigned_to) ? task.assigned_to : [];
   const assigneeNames = assignees.length
     ? assignees
@@ -94,175 +137,169 @@ const TaskCard = ({
         .filter(Boolean)
         .join(", ")
     : "Unassigned";
-
   const assignedByName =
-    task.assigned_by?.full_name || task.assigned_by?.username || "—";
+    task.assigned_by?.full_name || task.assigned_by?.username || "-";
+  const dueLabel = formatDate(task.due_date);
+  const createdAt = formatDate(task.created_at);
+  const daysLeftLabel = getDaysLeftLabel(task.due_date, isOverdue);
+  const hasActivity = task.comments_count > 0 || task.attachments_count > 0;
 
   return (
     <div
-      className={`group relative bg-white rounded-2xl border ${
-        isOverdue ? "border-rose-200" : "border-slate-200/80"
-      } shadow-[0_2px_10px_-3px_rgba(6,81,237,0.03)] hover:shadow-xl hover:shadow-pink-500/10 hover:border-pink-300 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden cursor-default`}
+      className={`group relative bg-white rounded-lg border ${
+        isOverdue ? "border-rose-200" : "border-slate-200"
+      } shadow-sm ${pStyles.glow} hover:shadow-xl hover:border-slate-300 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full min-w-0 overflow-hidden cursor-default`}
     >
-      {/* Top Accent Line */}
       <div
-        className={`absolute top-0 left-0 right-0 h-1.5 ${
-          isOverdue 
-            ? "bg-gradient-to-r from-rose-400 to-rose-500" 
-            : (priority === 'high' 
-                ? 'bg-gradient-to-r from-rose-400 to-rose-500' 
-                : priority === 'medium' 
-                  ? 'bg-gradient-to-r from-amber-400 to-amber-500' 
-                  : 'bg-gradient-to-r from-slate-300 to-slate-400')
-        } opacity-80 transition-opacity duration-300 group-hover:opacity-100`}
+        className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${
+          isOverdue ? "from-rose-500 via-pink-500 to-red-400" : pStyles.accent
+        } transition-all duration-300 group-hover:h-1.5`}
       />
 
-      <div className="p-5 flex flex-col flex-1 gap-4 pt-6">
-        {/* Header: Priority & Status */}
-        <div className="flex items-center justify-between gap-2">
+      <div className="p-4 sm:p-5 flex flex-col flex-1 gap-4 pt-6">
+        <div className="flex flex-col min-[380px]:flex-row min-[380px]:items-center justify-between gap-2">
           <div className="flex flex-wrap gap-2">
             <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-colors duration-300 ${pStyles.bg} ${pStyles.text} ${pStyles.border}`}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold capitalize border transition-colors duration-300 ${pStyles.bg} ${pStyles.text} ${pStyles.border}`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${pStyles.dot} ${priority === 'high' ? 'animate-pulse' : ''}`} />
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${pStyles.dot} ${
+                  priority === "high" ? "animate-pulse" : ""
+                }`}
+              />
               {priority}
             </span>
             {isOverdue && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200 uppercase tracking-wider animate-pulse">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200 animate-pulse">
                 <AlertCircle className="w-3 h-3" />
                 Overdue
               </span>
             )}
           </div>
           <span
-            className={`text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border transition-colors duration-300 ${sStyles.bg} ${sStyles.text} ${sStyles.border}`}
+            className={`w-fit text-xs font-bold px-2.5 py-1 rounded-md border transition-colors duration-300 ${sStyles.bg} ${sStyles.text} ${sStyles.border}`}
           >
             {sStyles.label}
           </span>
         </div>
 
-        {/* Title & Description */}
-        <div className="space-y-1.5">
-          <h3 className="text-base font-bold text-slate-800 leading-snug group-hover:text-pink-600 transition-colors duration-300 line-clamp-2">
+        <div className="space-y-2 min-w-0">
+          <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug group-hover:text-pink-600 transition-colors duration-300 line-clamp-2 break-words">
             {task.title}
           </h3>
           {task.description && (
-            <p className="text-[13px] text-slate-500 line-clamp-2 leading-relaxed">
+            <p className="text-sm text-slate-500 line-clamp-2 leading-6 break-words">
               {task.description}
             </p>
           )}
         </div>
 
-        {/* Assignees Section */}
-        <div className="flex flex-col gap-2 mt-1">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50/50 hover:bg-slate-50 p-3 rounded-xl border border-slate-100 gap-3 sm:gap-0 transition-colors duration-300">
+        <div className="rounded-lg bg-slate-50/80 px-3 py-3 ring-1 ring-slate-100 transition-colors duration-300 group-hover:bg-white">
+          <div className="grid grid-cols-1 min-[420px]:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] min-[420px]:items-center gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <Avatar
-                name={assigneeNames}
-                colorClass="bg-pink-500 text-white"
-              />
+              <Avatar name={assigneeNames} colorClass="bg-pink-500 text-white" />
               <div className="flex flex-col min-w-0">
-                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none mb-1">
+                <span className="text-[11px] text-slate-400 font-bold leading-none mb-1">
                   Assignee
                 </span>
-                <span className="text-[12px] font-semibold text-slate-700 truncate">
+                <span className="text-sm font-semibold text-slate-700 truncate" title={assigneeNames}>
                   {assigneeNames}
                 </span>
               </div>
             </div>
-            <div className="hidden sm:block w-px h-8 bg-slate-200/50 mx-2" />
-            <div className="flex items-center gap-3 min-w-0 sm:justify-end sm:text-right">
-              <div className="flex flex-col min-w-0 sm:items-end">
-                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none mb-1">
+            <div className="hidden min-[420px]:block w-px h-8 bg-slate-200 mx-1" />
+            <div className="flex items-center gap-3 min-w-0 min-[420px]:justify-end min-[420px]:text-right">
+              <div className="flex flex-col min-w-0 min-[420px]:items-end">
+                <span className="text-[11px] text-slate-400 font-bold leading-none mb-1">
                   Owner
                 </span>
-                <span className="text-[12px] font-semibold text-slate-700 truncate">
+                <span className="max-w-full text-sm font-semibold text-slate-700 truncate" title={assignedByName}>
                   {assignedByName}
                 </span>
               </div>
-              <Avatar name={assignedByName} colorClass="bg-white text-slate-600 border-slate-200" />
+              <Avatar
+                name={assignedByName}
+                colorClass="bg-white text-slate-600 border-slate-200"
+              />
             </div>
           </div>
         </div>
 
-        {/* Metadata Grid */}
-        <div className="grid grid-cols-2 gap-4 py-3 border-y border-slate-100 mt-auto">
+        <div className="grid grid-cols-1 min-[380px]:grid-cols-2 gap-3 pt-1 mt-auto">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-1.5 text-slate-400">
               <Calendar className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">
+              <span className="text-xs font-bold">
                 Due Date
               </span>
             </div>
             <div
-              className={`text-[12px] font-bold ${
+              className={`text-sm font-bold ${
                 isOverdue ? "text-rose-600" : "text-slate-700"
               }`}
             >
               {dueLabel}
             </div>
+            <span
+              className={`text-[11px] font-semibold ${
+                isOverdue ? "text-rose-500" : "text-slate-400"
+              }`}
+            >
+              {daysLeftLabel}
+            </span>
           </div>
-          <div className="flex flex-col gap-1 sm:items-end sm:text-right">
+          <div className="flex flex-col gap-1 min-[380px]:items-end min-[380px]:text-right">
             <div className="flex items-center gap-1.5 text-slate-400">
               <Clock className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">
+              <span className="text-xs font-bold">
                 Created
               </span>
             </div>
-            <div className="text-[12px] font-semibold text-slate-600 truncate">
+            <div className="text-sm font-semibold text-slate-600 truncate">
               {createdAt}
             </div>
           </div>
         </div>
 
-        {/* Activity & Ownership */}
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-3">
-            {task.comments_count > 0 && (
-              <div
-                className="flex items-center gap-1.5 text-slate-500 hover:text-pink-500 transition-colors cursor-pointer"
-                title="Comments"
-              >
-                <MessageSquare className="w-4 h-4 text-pink-400" />
-                <span className="text-[12px] font-bold">
-                  {task.comments_count}
-                </span>
-              </div>
-            )}
-            {task.attachments_count > 0 && (
-              <div
-                className="flex items-center gap-1.5 text-slate-500 hover:text-pink-500 transition-colors cursor-pointer"
-                title="Attachments"
-              >
-                <Paperclip className="w-4 h-4 text-slate-400" />
-                <span className="text-[12px] font-bold">
-                  {task.attachments_count}
-                </span>
-              </div>
+        <div className="flex flex-col min-[420px]:flex-row min-[420px]:items-center justify-between gap-3 border-t border-slate-100 pt-3">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-slate-500">
+            <span className="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1 ring-1 ring-slate-100">
+              <MessageSquare className="w-3.5 h-3.5 text-pink-500" />
+              {task.comments_count || 0}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1 ring-1 ring-slate-100">
+              <Paperclip className="w-3.5 h-3.5 text-slate-500" />
+              {task.attachments_count || 0}
+            </span>
+            {!hasActivity && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+                <Users className="w-3.5 h-3.5" />
+                Ready for action
+              </span>
             )}
           </div>
           {ownershipLabel && (
-            <span className="text-[10px] font-bold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-md border border-pink-100 uppercase tracking-wider shadow-sm">
+            <span className="w-fit text-xs font-bold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-md border border-pink-100">
               {ownershipLabel}
             </span>
           )}
         </div>
       </div>
 
-      {/* Footer Actions */}
-      <div className="px-5 pb-5 pt-0">
-        <div className="flex flex-col sm:flex-row items-center gap-2.5">
+      <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-0">
+        <div className="flex flex-col min-[420px]:flex-row items-stretch gap-2.5">
           {!isAccepted && !isCompleted && showAcceptButton && (
             <>
               <button
                 onClick={() => onCollaborate && onCollaborate(task, "comments")}
-                className="w-full sm:w-1/3 flex items-center justify-center px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-slate-600 bg-slate-50 hover:bg-slate-100 hover:text-slate-800 border border-slate-200 hover:border-slate-300 rounded-xl transition-all duration-200 active:scale-[0.98]"
+                className="w-full min-[420px]:w-1/3 min-w-[7rem] flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 hover:text-slate-800 border border-slate-200 hover:border-slate-300 rounded-lg transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-pink-200"
               >
+                <MessageSquare className="w-4 h-4" />
                 Details
               </button>
               <button
                 onClick={() => onAccept && onAccept(task)}
-                className="w-full sm:flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white text-[12px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200 active:scale-[0.98] shadow-md shadow-pink-200 hover:shadow-lg hover:shadow-pink-300"
+                className="w-full min-[420px]:flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-sm font-bold rounded-lg transition-all duration-200 active:scale-[0.98] shadow-md shadow-pink-200 hover:shadow-lg hover:shadow-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-200"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 {task.user ? "Accept" : "Claim"}
@@ -274,21 +311,22 @@ const TaskCard = ({
           {!isAccepted && !isCompleted && !showAcceptButton && (
             <button
               onClick={() => onCollaborate && onCollaborate(task, "comments")}
-              className="w-full flex items-center justify-center gap-2.5 px-5 py-2.5 bg-white border border-slate-200 hover:border-pink-300 hover:bg-pink-50 hover:text-pink-600 text-slate-600 text-[12px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200 active:scale-[0.98]"
+              className="w-full flex items-center justify-center gap-2.5 px-5 py-2.5 bg-white border border-slate-200 hover:border-pink-300 hover:bg-pink-50 hover:text-pink-600 text-slate-600 text-sm font-bold rounded-lg transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-pink-200"
             >
               <MessageSquare className="w-4 h-4 text-pink-500" />
               View Full Details
+              <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </button>
           )}
 
           {isAccepted && !isCompleted && (
             <>
-              <div className="flex gap-2.5 w-full sm:w-1/3">
+              <div className="flex gap-2.5 w-full min-[420px]:w-1/3 min-w-[7rem]">
                 <button
                   onClick={() =>
                     onCollaborate && onCollaborate(task, "comments")
                   }
-                  className="flex-1 relative flex items-center justify-center p-2.5 text-slate-500 bg-slate-50 hover:bg-pink-50 hover:text-pink-600 border border-slate-200 hover:border-pink-200 rounded-xl transition-all duration-200 active:scale-[0.95]"
+                  className="flex-1 relative flex items-center justify-center p-2.5 text-slate-500 bg-slate-50 hover:bg-pink-50 hover:text-pink-600 border border-slate-200 hover:border-pink-200 rounded-lg transition-all duration-200 active:scale-[0.95] focus:outline-none focus:ring-2 focus:ring-pink-200"
                   title="Discussion"
                 >
                   <MessageSquare className="w-4 h-4" />
@@ -300,7 +338,7 @@ const TaskCard = ({
                 </button>
                 <button
                   onClick={() => onCollaborate && onCollaborate(task, "files")}
-                  className="flex-1 relative flex items-center justify-center p-2.5 text-slate-500 bg-slate-50 hover:bg-pink-50 hover:text-pink-600 border border-slate-200 hover:border-pink-200 rounded-xl transition-all duration-200 active:scale-[0.95]"
+                  className="flex-1 relative flex items-center justify-center p-2.5 text-slate-500 bg-slate-50 hover:bg-pink-50 hover:text-pink-600 border border-slate-200 hover:border-pink-200 rounded-lg transition-all duration-200 active:scale-[0.95] focus:outline-none focus:ring-2 focus:ring-pink-200"
                   title="Files"
                 >
                   <Paperclip className="w-4 h-4" />
@@ -315,7 +353,7 @@ const TaskCard = ({
               </div>
               <button
                 onClick={() => onComplete && onComplete(task.id)}
-                className="w-full sm:flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-[12px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200 active:scale-[0.98] shadow-md shadow-emerald-200 hover:shadow-lg hover:shadow-emerald-300"
+                className="w-full min-[420px]:flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-bold rounded-lg transition-all duration-200 active:scale-[0.98] shadow-md shadow-emerald-200 hover:shadow-lg hover:shadow-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-200"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 Complete
@@ -327,11 +365,11 @@ const TaskCard = ({
             <>
               <button
                 onClick={() => onCollaborate && onCollaborate(task, "comments")}
-                className="w-full sm:w-1/3 flex items-center justify-center px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-slate-600 bg-slate-50 border border-slate-200 rounded-xl transition-all duration-200 hover:bg-slate-100 hover:text-slate-800 active:scale-[0.98]"
+                className="w-full min-[420px]:w-1/3 min-w-[7rem] flex items-center justify-center px-4 py-2.5 text-sm font-bold text-slate-600 bg-slate-50 border border-slate-200 rounded-lg transition-all duration-200 hover:bg-slate-100 hover:text-slate-800 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-emerald-200"
               >
                 View
               </button>
-              <div className="w-full sm:flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-600 text-[12px] font-bold uppercase tracking-wider rounded-xl border border-emerald-200 shadow-sm cursor-default">
+              <div className="w-full min-[420px]:flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-600 text-sm font-bold rounded-lg border border-emerald-200 shadow-sm cursor-default">
                 <CheckCircle2 className="w-4 h-4" />
                 Completed
               </div>
