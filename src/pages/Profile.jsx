@@ -88,7 +88,7 @@ export default function Profile() {
   }, [stats, tasks]);
 
   return (
-    <div className="w-full bg-[#F8F9FA] px-4 py-5 md:px-6 lg:px-8">
+    <div className="w-full bg-background px-4 py-5 md:px-6 lg:px-8">
       
       <AnimatePresence>
         {error && (
@@ -113,7 +113,7 @@ export default function Profile() {
         <motion.div variants={containerVariants} initial="hidden" animate="show" className="mx-auto max-w-7xl space-y-6">
           
           {/* HEADER SECTION - Matches the "Renderways" Mobile Profile Header */}
-          <motion.section variants={itemVariants} className="relative overflow-hidden rounded-[2rem] bg-[#E41F6A] p-6 md:p-8 lg:p-10 shadow-sm">
+          <motion.section variants={itemVariants} className="relative overflow-hidden rounded-[2rem] bg-primary-glow p-6 md:p-8 lg:p-10 shadow-sm">
             {/* Background Accents */}
             <div className="absolute -right-10 -top-10 h-64 w-64 rounded-full bg-white/10 blur-[40px]" />
             <div className="absolute bottom-0 right-10 opacity-10 pointer-events-none">
@@ -130,7 +130,7 @@ export default function Profile() {
                 
                 {/* User Info */}
                 <div className="flex items-center gap-5 min-w-0">
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white text-3xl font-black text-[#E41F6A] shadow-md">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white text-3xl font-black text-primary-glow shadow-md">
                     {getInitials(user)}
                   </div>
                   <div className="min-w-0">
@@ -168,7 +168,7 @@ export default function Profile() {
                       initial={{ width: 0 }} 
                       animate={{ width: `${derived.completionRate}%` }} 
                       transition={{ duration: 1, ease: "easeOut" }}
-                      className="h-full rounded-full bg-[#E41F6A]" 
+                      className="h-full rounded-full bg-primary-glow" 
                     />
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export default function Profile() {
           {/* WORKLOAD SNAPSHOT - Stable, flat cards with expanded padding */}
           <motion.section variants={itemVariants} className="space-y-4">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[#E41F6A]/80">Snapshot</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary-glow/80">Snapshot</span>
               <h2 className="text-xl font-bold tracking-tight text-slate-900 md:text-2xl">Workload overview</h2>
               <p className="mt-1 text-xs font-medium text-slate-500 md:text-sm">A quick view of active work, completed delivery, and deadlines.</p>
             </div>
@@ -268,7 +268,7 @@ export default function Profile() {
               {/* Account Details */}
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="rounded-xl bg-[#E41F6A]/10 p-2.5 text-[#E41F6A]">
+                  <div className="rounded-xl bg-primary-glow/10 p-2.5 text-primary-glow">
                     <User2 className="h-4 w-4" strokeWidth={2.5} />
                   </div>
                   <h2 className="text-base font-bold text-slate-900">Account Details</h2>
@@ -299,7 +299,7 @@ export default function Profile() {
                   {derived.nextDueTask?.title || "Nothing scheduled"}
                 </h2>
                 <div className="mt-4 flex items-center gap-2 rounded-xl bg-slate-50 border border-slate-100 px-3.5 py-2.5 text-sm text-slate-600">
-                  <CalendarDays className="h-4 w-4 text-[#E41F6A]" />
+                  <CalendarDays className="h-4 w-4 text-primary-glow" />
                   <span className="font-semibold text-xs">{formatDate(derived.nextDueTask?.due_date)}</span>
                 </div>
               </div>

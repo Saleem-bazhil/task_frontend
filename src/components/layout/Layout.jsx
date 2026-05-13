@@ -9,10 +9,7 @@ export default function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="relative flex h-screen overflow-hidden bg-[#fafafa] font-sans text-slate-800">
-      {/* Premium Ambient Background Glow */}
-      <div className="pointer-events-none fixed left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink-100/60 blur-[100px]" />
-      
+    <div className="relative flex h-screen overflow-hidden bg-background font-sans text-slate-800">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen((current) => !current)} />
 
       <div className="relative flex h-full w-full flex-1 flex-col transition-all duration-300 md:pl-64 z-10">

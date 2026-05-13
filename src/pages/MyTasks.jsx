@@ -129,7 +129,7 @@ const MyTasks = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsCreationModalOpen(true)}
-            className="px-4 py-3 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+            className="px-4 py-3 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold flex items-center gap-2 transition-colors"
           >
             <Plus className="w-5 h-5" />
             Create Task
@@ -154,8 +154,8 @@ const MyTasks = () => {
       {/* Created by Me Section */}
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-4">
-          <span className="w-2 h-2 bg-blue-500 rounded-full" />
-          <span className="text-[10px] font-black uppercase tracking-widest text-blue-500">
+          <span className="w-2 h-2 bg-pink-500 rounded-full" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-pink-500">
             Created by Me
           </span>
         </div>
@@ -170,14 +170,14 @@ const MyTasks = () => {
                 />
               ))
           ) : createdTasks.length === 0 ? (
-            <div className="col-span-full py-10 bg-blue-50 border-2 border-dashed border-blue-200 rounded-3xl flex flex-col items-center justify-center text-center">
-              <div className="p-4 bg-white rounded-2xl shadow-lg shadow-blue-100 mb-4">
-                <Inbox className="w-8 h-8 text-blue-200" />
+            <div className="col-span-full py-10 bg-pink-50 border-2 border-dashed border-pink-200 rounded-3xl flex flex-col items-center justify-center text-center">
+              <div className="p-4 bg-white rounded-2xl shadow-lg shadow-pink-100 mb-4">
+                <Inbox className="w-8 h-8 text-pink-200" />
               </div>
-              <h3 className="text-sm font-bold text-blue-800">
+              <h3 className="text-sm font-bold text-pink-800">
                 No tasks created by you
               </h3>
-              <p className="text-xs text-blue-600 mt-1">
+              <p className="text-xs text-pink-600 mt-1">
                 Tasks you create will appear here
               </p>
             </div>
@@ -198,8 +198,8 @@ const MyTasks = () => {
       {/* Assigned to Me Section */}
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-4">
-          <span className="w-2 h-2 bg-green-500 rounded-full" />
-          <span className="text-[10px] font-black uppercase tracking-widest text-green-500">
+          <span className="w-2 h-2 bg-pink-500 rounded-full" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-pink-500">
             Assigned to Me
           </span>
         </div>
@@ -214,14 +214,14 @@ const MyTasks = () => {
                 />
               ))
           ) : assignedTasks.length === 0 ? (
-            <div className="col-span-full py-10 bg-green-50 border-2 border-dashed border-green-200 rounded-3xl flex flex-col items-center justify-center text-center">
-              <div className="p-4 bg-white rounded-2xl shadow-lg shadow-green-100 mb-4">
-                <Inbox className="w-8 h-8 text-green-200" />
+            <div className="col-span-full py-10 bg-pink-50 border-2 border-dashed border-pink-200 rounded-3xl flex flex-col items-center justify-center text-center">
+              <div className="p-4 bg-white rounded-2xl shadow-lg shadow-pink-100 mb-4">
+                <Inbox className="w-8 h-8 text-pink-200" />
               </div>
-              <h3 className="text-sm font-bold text-green-800">
+              <h3 className="text-sm font-bold text-pink-800">
                 No tasks assigned to you
               </h3>
-              <p className="text-xs text-green-600 mt-1">
+              <p className="text-xs text-pink-600 mt-1">
                 Tasks assigned to you will appear here
               </p>
             </div>

@@ -68,7 +68,7 @@ export default function Login() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#E91E63] px-4 py-8">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-primary-glow px-4 py-8">
       {/* Decorative sparkles — top right */}
       <div className="pointer-events-none absolute right-6 top-20 sm:right-16 sm:top-24">
         <SparkleIcon className="h-20 w-20 text-pink-300/40 sm:h-28 sm:w-28" />
@@ -175,7 +175,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="mt-3 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-[#E91E63] px-4 py-4 text-base font-semibold text-white shadow-lg shadow-pink-500/30 transition-all hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-[#E91E63]/20 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:shadow-none"
+            className="mt-3 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-primary-glow px-4 py-4 text-base font-semibold text-white transition-colors hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-primary-glow/20 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
           >
             {isSubmitting ? "Signing in..." : "Sign In"}
             {!isSubmitting ? <ArrowRight className="h-5 w-5" /> : null}

@@ -5,8 +5,8 @@
     margin-top: 8px;
     width: 360px;
     max-height: 500px;
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -33,20 +33,20 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border);
 }
 
 .notification-dropdown-header h3 {
     margin: 0;
     font-size: 16px;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--foreground);
 }
 
 .mark-all-read-btn {
     background: none;
     border: none;
-    color: #0ea5e9;
+    color: var(--primary-glow);
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
@@ -55,7 +55,7 @@
 }
 
 .mark-all-read-btn:hover {
-    color: #0284c7;
+    color: var(--primary);
 }
 
 /* Body */
@@ -74,12 +74,12 @@
 }
 
 .notification-dropdown-body::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: color-mix(in oklab, var(--muted-foreground) 30%, transparent);
     border-radius: 3px;
 }
 
 .notification-dropdown-body::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: color-mix(in oklab, var(--muted-foreground) 45%, transparent);
 }
 
 .notifications-list {
@@ -94,7 +94,7 @@
     align-items: center;
     justify-content: center;
     padding: 40px 16px;
-    color: #94a3b8;
+    color: var(--muted-foreground);
     text-align: center;
 }
 
@@ -111,14 +111,14 @@
 /* Footer */
 .notification-dropdown-footer {
     padding: 12px 16px;
-    border-top: 1px solid #e2e8f0;
-    background-color: #f8fafc;
+    border-top: 1px solid var(--border);
+    background-color: var(--muted);
     border-radius: 0 0 12px 12px;
 }
 
 .view-all-link {
     display: block;
-    color: #0ea5e9;
+    color: var(--primary-glow);
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
@@ -126,7 +126,7 @@
 }
 
 .view-all-link:hover {
-    color: #0284c7;
+    color: var(--primary);
 }
 
 @media (max-width: 640px) {
@@ -139,7 +139,7 @@
         width: 100%;
         max-height: 70vh;
         border-radius: 24px 24px 0 0;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--border);
         border-bottom: none;
         margin-top: 0;
         box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);

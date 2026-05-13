@@ -47,7 +47,7 @@ export default function Home() {
   const isAdmin = dashboard?.viewer_role === "admin";
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] selection:bg-pink-200 selection:text-pink-900">
+    <div className="min-h-screen bg-background selection:bg-pink-200 selection:text-pink-900">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -108,7 +108,7 @@ export default function Home() {
             <div className="flex flex-col gap-3 items-end">
               <button
                 onClick={() => setIsCreationModalOpen(true)}
-                className="px-4 py-3 rounded-xl bg-white text-pink-600 hover:bg-pink-50 font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                className="button-plain px-4 py-3 rounded-xl bg-white/90 backdrop-blur-md border border-white/60 text-pink-600 font-semibold flex items-center gap-2 hover:bg-white transition-colors"
               >
                 <Plus className="w-5 h-5" />
                 Create Task

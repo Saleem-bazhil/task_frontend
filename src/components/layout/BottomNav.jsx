@@ -33,7 +33,7 @@ export default function BottomNav() {
             {isActive && (
               <motion.div
                 layoutId="bottomNavIndicator"
-                className="absolute inset-y-1.5 inset-x-1 rounded-full bg-[#E41F6A]/10"
+                className="absolute inset-y-1.5 inset-x-1 rounded-full bg-primary-glow/10"
                 transition={{ 
                   type: "spring", 
                   stiffness: 400, 
@@ -45,7 +45,7 @@ export default function BottomNav() {
             {/* Icon: Becomes slightly thicker when active to make it pop */}
             <Icon
               className={`relative z-10 mb-0.5 h-[22px] w-[22px] transition-colors duration-300 ${
-                isActive ? "text-[#E41F6A]" : "text-slate-400"
+                isActive ? "text-primary-glow" : "text-slate-400"
               }`}
               strokeWidth={isActive ? 2.5 : 2}
             />
@@ -53,7 +53,7 @@ export default function BottomNav() {
             {/* Text label */}
             <span
               className={`relative z-10 text-[10px] tracking-wide transition-colors duration-300 ${
-                isActive ? "font-bold text-[#E41F6A]" : "font-medium text-slate-400"
+                isActive ? "font-bold text-primary-glow" : "font-medium text-slate-400"
               }`}
             >
               {item.name}

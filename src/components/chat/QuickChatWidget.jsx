@@ -72,7 +72,7 @@ export default function QuickChatWidget() {
                       onClick={() => setActiveConversation(conv)}
                       className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition hover:bg-slate-50"
                     >
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E41F6A]/10 font-semibold text-[#E41F6A]">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-glow/10 font-semibold text-primary-glow">
                         {(conv.other_user?.username || "U").slice(0, 1).toUpperCase()}
                       </div>
                       <div className="min-w-0 flex-1">
@@ -96,7 +96,7 @@ export default function QuickChatWidget() {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-14 items-center justify-center gap-2.5 rounded-full bg-[#E41F6A] px-6 text-white shadow-md transition-colors hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-500/20"
+        className="flex h-14 items-center justify-center gap-2.5 rounded-full bg-primary-glow px-6 text-white shadow-md transition-colors hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-500/20"
         aria-label="Toggle Quick Chat"
       >
         {isOpen ? (

@@ -29,13 +29,13 @@ const NotificationItem = ({ notification, onClose }) => {
 
   const getEventColor = (eventType) => {
     const colors = {
-      task_assigned: "#3b82f6",
-      task_updated: "#8b5cf6",
-      comment_added: "#ec4899",
-      task_completed: "#10b981",
-      task_status_changed: "#f59e0b",
+      task_assigned: "var(--info)",
+      task_updated: "var(--primary-glow)",
+      comment_added: "var(--primary-glow)",
+      task_completed: "var(--success)",
+      task_status_changed: "var(--warning)",
     };
-    return colors[eventType] || "#64748b";
+    return colors[eventType] || "var(--muted-foreground)";
   };
 
   const formatTime = (dateString) => {

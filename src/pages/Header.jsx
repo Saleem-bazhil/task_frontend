@@ -39,7 +39,7 @@ export default function Header() {
             {user?.role || "Employee"}
           </p>
         </div>
-        <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-full bg-[#E41F6A]/10 font-semibold text-[#E41F6A]">
+        <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-full bg-primary-glow/10 font-semibold text-primary-glow">
           {(user?.username || "U").slice(0, 1).toUpperCase()}
         </div>
       </div>

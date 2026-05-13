@@ -150,17 +150,17 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
     {
       value: "low",
       label: "Low",
-      color: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      color: "bg-pink-500 text-white border-pink-500",
     },
     {
       value: "medium",
       label: "Medium",
-      color: "bg-amber-50 text-amber-700 border-amber-200",
+      color: "bg-pink-500 text-white border-pink-500",
     },
     {
       value: "high",
       label: "High",
-      color: "bg-rose-50 text-rose-700 border-rose-200",
+      color: "bg-pink-500 text-white border-pink-500",
     },
   ];
 
@@ -198,7 +198,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                 <button
                   onClick={handleClose}
                   disabled={submitting}
-                  className="p-2 hover:bg-slate-100 rounded-xl transition-colors disabled:opacity-50"
+                  className="button-plain p-2 hover:bg-slate-100 rounded-xl transition-colors disabled:opacity-50"
                 >
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
@@ -265,7 +265,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                           }))
                         }
                         disabled={submitting}
-                        className={`flex-1 px-4 py-3 rounded-xl font-semibold transition-all border-2 ${
+                        className={`button-plain flex-1 px-4 py-3 rounded-xl font-semibold transition-all border-2 ${
                           formData.priority === option.value
                             ? `${option.color} border-current`
                             : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
@@ -305,7 +305,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                       type="button"
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                       disabled={submitting || loadingUsers}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-pink-500 bg-slate-50 focus:outline-none text-left flex items-center justify-between text-slate-700 disabled:opacity-50 transition-all"
+                      className="button-plain w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-pink-500 bg-slate-50 focus:outline-none text-left flex items-center justify-between text-slate-700 disabled:opacity-50 transition-all"
                     >
                       <span
                         className={
@@ -339,7 +339,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                               key={user.id}
                               type="button"
                               onClick={() => handleUserToggle(user.id)}
-                              className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 ${
+                              className={`button-plain w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 ${
                                 formData.assigned_to_ids.includes(user.id)
                                   ? "bg-pink-50"
                                   : ""
@@ -395,7 +395,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                             <button
                               type="button"
                               onClick={() => handleUserToggle(userId)}
-                              className="ml-1 hover:text-pink-900"
+                              className="button-plain ml-1 hover:text-pink-900"
                             >
                               ✕
                             </button>
@@ -412,7 +412,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                     type="button"
                     onClick={handleClose}
                     disabled={submitting}
-                    className="flex-1 px-4 py-3 rounded-xl font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50"
+                    className="button-plain flex-1 px-4 py-3 rounded-xl font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>
