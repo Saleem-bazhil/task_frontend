@@ -2,15 +2,6 @@
     position: absolute;
     top: 100%;
     right: 0;
-<<<<<<< HEAD
-    margin-top: 8px;
-    width: 360px;
-    max-height: 500px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-=======
     margin-top: 12px;
     width: min(420px, calc(100vw - 24px));
     max-height: min(620px, calc(100vh - 120px));
@@ -18,7 +9,6 @@
     border: 1px solid #e2e8f0;
     border-radius: 18px;
     box-shadow: 0 28px 70px -34px rgba(15, 23, 42, 0.55);
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -50,11 +40,6 @@
 .notification-dropdown-header {
     display: flex;
     justify-content: space-between;
-<<<<<<< HEAD
-    align-items: center;
-    padding: 16px;
-    border-bottom: 1px solid var(--border);
-=======
     align-items: flex-start;
     gap: 14px;
     padding: 18px 18px 16px;
@@ -68,24 +53,10 @@
     color: #ec4899;
     font-size: 11px;
     font-weight: 800;
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
 }
 
 .notification-dropdown-header h3 {
     margin: 0;
-<<<<<<< HEAD
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--foreground);
-}
-
-.mark-all-read-btn {
-    background: none;
-    border: none;
-    color: var(--primary-glow);
-    font-size: 13px;
-    font-weight: 500;
-=======
     font-size: 18px;
     font-weight: 850;
     color: #0f172a;
@@ -98,7 +69,6 @@
     color: #e11d48;
     font-size: 12px;
     font-weight: 800;
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
     cursor: pointer;
     padding: 8px 10px;
     border-radius: 999px;
@@ -107,14 +77,10 @@
 }
 
 .mark-all-read-btn:hover {
-<<<<<<< HEAD
-    color: var(--primary);
-=======
     background: #e11d48;
     border-color: #e11d48;
     color: #ffffff;
     box-shadow: 0 14px 24px -18px rgba(225, 29, 72, 0.7);
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
 }
 
 .notification-dropdown-body {
@@ -133,13 +99,8 @@
 }
 
 .notification-dropdown-body::-webkit-scrollbar-thumb {
-<<<<<<< HEAD
-    background: color-mix(in oklab, var(--muted-foreground) 30%, transparent);
-    border-radius: 3px;
-=======
     background: #cbd5e1;
     border-radius: 999px;
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
 }
 
 .notification-dropdown-body::-webkit-scrollbar-thumb:hover {
@@ -159,13 +120,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-<<<<<<< HEAD
-    padding: 40px 16px;
-    color: var(--muted-foreground);
-=======
     padding: 42px 18px;
     color: #64748b;
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
     text-align: center;
 }
 
@@ -197,17 +153,6 @@
 }
 
 .notification-dropdown-footer {
-<<<<<<< HEAD
-    padding: 12px 16px;
-    border-top: 1px solid var(--border);
-    background-color: var(--muted);
-    border-radius: 0 0 12px 12px;
-}
-
-.view-all-link {
-    display: block;
-    color: var(--primary-glow);
-=======
     padding: 12px;
     border-top: 1px solid #eef2f7;
     background-color: #f8fafc;
@@ -219,7 +164,6 @@
     justify-content: center;
     gap: 6px;
     color: #e11d48;
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
     text-decoration: none;
     font-size: 14px;
     font-weight: 800;
@@ -229,12 +173,8 @@
 }
 
 .view-all-link:hover {
-<<<<<<< HEAD
-    color: var(--primary);
-=======
     background: #fff1f2;
     color: #be123c;
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
 }
 
 @media (max-width: 640px) {
@@ -247,10 +187,6 @@
         width: 100%;
         max-height: 78vh;
         border-radius: 24px 24px 0 0;
-<<<<<<< HEAD
-        border: 1px solid var(--border);
-=======
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
         border-bottom: none;
         margin-top: 0;
         box-shadow: 0 -20px 60px -28px rgba(15, 23, 42, 0.55);
@@ -263,12 +199,9 @@
     .notification-dropdown-header h3 {
         font-size: 20px;
     }
-<<<<<<< HEAD
-=======
 
     .notifications-list {
         gap: 8px;
         padding: 10px;
     }
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
 }

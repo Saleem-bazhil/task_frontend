@@ -10,25 +10,6 @@
     background: #ffffff;
     border: 1px solid #e2e8f0;
     cursor: pointer;
-<<<<<<< HEAD
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted-foreground);
-    transition: all 0.2s ease;
-    border-radius: 50%;
-}
-
-.notification-bell:hover {
-    background-color: var(--muted);
-    color: var(--foreground);
-}
-
-.notification-bell.active {
-    background-color: var(--border);
-    color: var(--foreground);
-=======
     padding: 0;
     display: flex;
     align-items: center;
@@ -42,13 +23,13 @@
 .notification-bell:hover {
     background: #fff1f2;
     border-color: #fecdd3;
-    color: #e11d48;
+    color: #8b5cf6;
     box-shadow: 0 16px 32px -18px rgba(225, 29, 72, 0.35);
     transform: translateY(-1px);
 }
 
 .notification-bell.active {
-    background: linear-gradient(135deg, #ec4899, #e11d48);
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
     border-color: transparent;
     color: #ffffff;
     box-shadow: 0 18px 36px -18px rgba(236, 72, 153, 0.55);
@@ -57,7 +38,6 @@
 .notification-bell:focus-visible {
     outline: 3px solid rgba(236, 72, 153, 0.22);
     outline-offset: 3px;
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
 }
 
 .bell-icon {
@@ -70,17 +50,10 @@
 
 .notification-badge {
     position: absolute;
-<<<<<<< HEAD
-    top: 0px;
-    right: 0px;
-    background: var(--destructive);
-    color: var(--destructive-foreground);
-=======
     top: -4px;
     right: -4px;
     background: #f59e0b;
     color: white;
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
     font-size: 11px;
     font-weight: 800;
     line-height: 1;
@@ -99,30 +72,19 @@
     width: 11px;
     height: 11px;
     border-radius: 50%;
-<<<<<<< HEAD
-    background-color: var(--success);
-    border: 2px solid var(--card);
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
-=======
     background-color: #10b981;
     border: 2px solid white;
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
     z-index: 10;
 }
 
 .notification-bell.active .connection-indicator {
-    border-color: #ec4899;
+    border-color: #8b5cf6;
 }
 
 .connection-indicator.disconnected {
-<<<<<<< HEAD
-    background-color: var(--destructive);
-    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
-=======
-    background-color: #e11d48;
+    background-color: #8b5cf6;
     box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.16);
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
 }
 
 @media (max-width: 640px) {

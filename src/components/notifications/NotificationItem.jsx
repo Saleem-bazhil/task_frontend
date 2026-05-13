@@ -93,31 +93,7 @@ const NotificationItem = ({ notification, onClose }) => {
     }
   };
 
-<<<<<<< HEAD
-  const getEventIcon = (eventType) => {
-    const icons = {
-      task_assigned: "📋",
-      task_updated: "✏️",
-      comment_added: "💬",
-      task_completed: "✅",
-      task_status_changed: "⚡",
-    };
-    return icons[eventType] || "📬";
-  };
 
-  const getEventColor = (eventType) => {
-    const colors = {
-      task_assigned: "var(--info)",
-      task_updated: "var(--primary-glow)",
-      comment_added: "var(--primary-glow)",
-      task_completed: "var(--success)",
-      task_status_changed: "var(--warning)",
-    };
-    return colors[eventType] || "var(--muted-foreground)";
-  };
-
-=======
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();

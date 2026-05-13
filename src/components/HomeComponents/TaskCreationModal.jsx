@@ -150,11 +150,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
     {
       value: "low",
       label: "Low",
-<<<<<<< HEAD
       color: "bg-pink-500 text-white border-pink-500",
-=======
-      color: "bg-green-50 text-green-700 border-green-200",
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
     },
     {
       value: "medium",
@@ -164,11 +160,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
     {
       value: "high",
       label: "High",
-<<<<<<< HEAD
-      color: "bg-pink-500 text-white border-pink-500",
-=======
       color: "bg-red-50 text-red-700 border-red-200",
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
     },
   ];
 
@@ -313,11 +305,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                       type="button"
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                       disabled={submitting || loadingUsers}
-<<<<<<< HEAD
-                      className="button-plain w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-pink-500 bg-slate-50 focus:outline-none text-left flex items-center justify-between text-slate-700 disabled:opacity-50 transition-all"
-=======
                       className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-500 bg-slate-50 focus:outline-none text-left flex items-center justify-between text-slate-700 disabled:opacity-50 transition-all"
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
                     >
                       <span
                         className={
@@ -407,11 +395,7 @@ const TaskCreationModal = ({ isOpen, onClose, onTaskCreated }) => {
                             <button
                               type="button"
                               onClick={() => handleUserToggle(userId)}
-<<<<<<< HEAD
-                              className="button-plain ml-1 hover:text-pink-900"
-=======
                               className="ml-1 hover:text-indigo-900"
->>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
                             >
                               ✕
                             </button>

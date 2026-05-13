@@ -154,6 +154,7 @@ const MyTasks = () => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* Created by Me Section */}
       <div className="mb-10">
