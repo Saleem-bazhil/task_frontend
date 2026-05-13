@@ -1,21 +1,99 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  CheckCircle2,
+  ChevronRight,
+  ClipboardList,
+  MessageSquare,
+  Pencil,
+  Zap,
+} from "lucide-react";
 import { useNotifications } from "../../context/NotificationContext";
 import "./NotificationItem.css";
 
+const EVENT_META = {
+  task_assigned: {
+    Icon: ClipboardList,
+    color: "#e11d48",
+    soft: "#fff1f2",
+    border: "#fecdd3",
+    label: "Assigned",
+  },
+  task_updated: {
+    Icon: Pencil,
+    color: "#4f46e5",
+    soft: "#eef2ff",
+    border: "#c7d2fe",
+    label: "Updated",
+  },
+  comment_added: {
+    Icon: MessageSquare,
+    color: "#ec4899",
+    soft: "#fdf2f8",
+    border: "#fbcfe8",
+    label: "Comment",
+  },
+  task_completed: {
+    Icon: CheckCircle2,
+    color: "#10b981",
+    soft: "#ecfdf5",
+    border: "#a7f3d0",
+    label: "Completed",
+  },
+  task_status_changed: {
+    Icon: Zap,
+    color: "#f59e0b",
+    soft: "#fffbeb",
+    border: "#fde68a",
+    label: "Status",
+  },
+};
+
+const FALLBACK_META = {
+  Icon: ClipboardList,
+  color: "#64748b",
+  soft: "#f8fafc",
+  border: "#e2e8f0",
+  label: "Notice",
+};
+
 const NotificationItem = ({ notification, onClose }) => {
   const { markAsRead } = useNotifications();
+  const navigate = useNavigate();
+  const meta = EVENT_META[notification.event_type] || FALLBACK_META;
+  const Icon = meta.Icon;
+
+  const resolveTaskRoute = () => {
+    const status = (notification.task_status || notification.status || "").toLowerCase();
+    const eventType = notification.event_type || "";
+
+    if (status === "completed" || eventType === "task_completed") {
+      return "/app/completed-tasks";
+    }
+
+    if (
+      status === "in_progress" ||
+      eventType === "task_status_changed" ||
+      eventType === "comment_added"
+    ) {
+      return "/app/accepted-tasks";
+    }
+
+    return "/app/my-tasks";
+  };
 
   const handleClick = () => {
     if (!notification.is_read) {
       markAsRead(notification.id);
     }
-    // Navigate to task if available
+
     if (notification.task_id) {
       onClose();
-      window.location.href = `/tasks/${notification.task_id}`;
+      navigate(resolveTaskRoute());
     }
   };
 
+<<<<<<< HEAD
   const getEventIcon = (eventType) => {
     const icons = {
       task_assigned: "📋",
@@ -38,6 +116,8 @@ const NotificationItem = ({ notification, onClose }) => {
     return colors[eventType] || "var(--muted-foreground)";
   };
 
+=======
+>>>>>>> 7185a4868a2893dae99f923a6ad6ba10959ee520
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -56,31 +136,35 @@ const NotificationItem = ({ notification, onClose }) => {
       className={`notification-item ${!notification.is_read ? "unread" : "read"}`}
       onClick={handleClick}
       style={{
-        "--event-color": getEventColor(notification.event_type),
+        "--event-color": meta.color,
+        "--event-soft": meta.soft,
+        "--event-border": meta.border,
       }}
     >
-      {/* Icon */}
       <div className="notification-icon">
-        <span>{getEventIcon(notification.event_type)}</span>
+        <Icon size={20} strokeWidth={2.4} />
       </div>
 
-      {/* Content */}
       <div className="notification-content">
-        <div className="notification-title">
-          {notification.sender?.username && (
-            <strong>{notification.sender.username}</strong>
-          )}
-          {notification.title && !notification.sender && (
-            <strong>{notification.title}</strong>
-          )}
+        <div className="notification-title-row">
+          <div className="notification-title">
+            {notification.sender?.username && (
+              <strong>{notification.sender.username}</strong>
+            )}
+            {notification.title && !notification.sender && (
+              <strong>{notification.title}</strong>
+            )}
+            {!notification.sender?.username && !notification.title && (
+              <strong>{meta.label} update</strong>
+            )}
+          </div>
+          <span className="notification-event-label">{meta.label}</span>
         </div>
         <p className="notification-message">
           {notification.message || notification.action}
         </p>
         {notification.task_title && (
-          <p className="notification-task">
-            <em>Task: {notification.task_title}</em>
-          </p>
+          <p className="notification-task">Task: {notification.task_title}</p>
         )}
         <div className="notification-meta">
           <span className="notification-time">
@@ -90,19 +174,9 @@ const NotificationItem = ({ notification, onClose }) => {
         </div>
       </div>
 
-      {/* Action */}
       {notification.task_id && (
         <div className="notification-action">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
+          <ChevronRight size={18} strokeWidth={2.4} />
         </div>
       )}
     </div>
